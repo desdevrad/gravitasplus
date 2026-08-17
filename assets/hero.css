@@ -57,8 +57,55 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
   background: radial-gradient(closest-side, rgba(3,3,3,.82), rgba(3,3,3,.55) 55%, rgba(3,3,3,0) 100%);
   pointer-events: none;
 }
+.lp-orbit__stage { position: relative; }
 .lp-orbit canvas {
   display: block; width: 100%; aspect-ratio: 1 / 1; position: relative;
+}
+
+/* ---- Touch play area ------------------------------------------------------
+   On a touch screen there is no hover, so the third mass is driven by a finger
+   drag — and a finger drag is also how you scroll. Rather than kill scrolling
+   across the whole hero (which would trap the reader on a screen the orbit
+   nearly fills), one deliberately small patch centred on the pair opts out of
+   panning. Inside it a drag plays the orbit; a few dozen pixels outside it the
+   page scrolls as usual, so there is always an easy way past.
+   Sized to cover the strong-influence radius (R_NEAR in hero.js) with margin. */
+.lp-orbit__hit {
+  position: absolute; left: 50%; top: 50%;
+  width: 70%; aspect-ratio: 1 / 1; transform: translate(-50%, -50%);
+  border-radius: 50%; z-index: 2;
+  pointer-events: none;          /* inert for mice — the comet owns the pointer */
+}
+/* any-pointer, not pointer: a touchscreen laptop should get the play area even
+   though its primary pointer is a mouse. Pointer events bubble to the hero
+   either way, so switching this on costs mouse users nothing. */
+@media (any-pointer: coarse) {
+  .lp-orbit__hit {
+    pointer-events: auto;
+    touch-action: none;          /* the browser stops treating a drag here as a scroll */
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ---- Copy lock on touch ---------------------------------------------------
+   A press-and-drag over the hero used to start a text selection: the magnifier
+   appeared, the handles came up, and the gravity interaction was lost behind a
+   selection the reader never wanted. Hero copy is not the sort of text anyone
+   long-presses to quote, so on touch devices it is simply not selectable.
+   Deliberately scoped to the hero — body copy further down the page stays
+   selectable, quotable and translatable. */
+@media (pointer: coarse) {
+  .lp-hero, .lp-hero * {
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* …but never lock a field the reader has to type into. */
+  .lp-hero input, .lp-hero textarea {
+    -webkit-user-select: text; user-select: text;
+  }
 }
 .lp-orbit__cap {
   margin: 0; text-align: center; position: relative;

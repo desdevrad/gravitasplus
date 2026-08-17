@@ -103,7 +103,7 @@
   }
 
   /* ---- in-page section nav --------------------------------------------- */
-  var secNav = document.querySelector('.dossier-nav');
+  var secNav = document.querySelector('.topic-nav');
   if (secNav && 'IntersectionObserver' in window) {
     var links = [].slice.call(secNav.querySelectorAll('a'));
     var map = {};

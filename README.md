@@ -5,9 +5,9 @@ workflow is included in `.github/workflows/deploy.yml`.
 
 ```
 index.html                        Home
-dossiers.html                     Dossier index (filter + search)
-dossier-computable-universe.html  A full worked dossier — all seven layers
-dossier-machine-hypothesis.html   Dossier 03 — the roadmap's starting topic
+topics.html                       Topic index (filter + search)
+topic-computable-universe.html    A full worked topic — all seven layers
+topic-machine-hypothesis.html     Topic 03 — the roadmap's starting topic
 account.html                      Sign in / create an account
 magazine.html                     Article archive
 article-hypothesis-or-sentence.html  A full article — the Magazine template
@@ -25,10 +25,10 @@ assets/                           gravitas.css · site.css · hero.css · site.j
 
 ## The two decisions that shaped everything
 
-### 1. The dossier is the unit, not the video
+### 1. The topic is the unit, not the video
 
 The roadmap says a video is the *beginning* of a path. So the site is not
-organised around episodes — it is organised around **questions**. A dossier is
+organised around episodes — it is organised around **questions**. A topic is
 one question with every layer wrapped around it:
 
 | Layer | What it does |
@@ -41,7 +41,7 @@ one question with every layer wrapped around it:
 | 06 Viewpoints | the strongest case *against* our own reading, plus a poll |
 | 07 Discussion | comments, this week's question, a public correction log |
 
-`dossier-computable-universe.html` is built out in full so the pattern is
+`topic-computable-universe.html` is built out in full so the pattern is
 concrete rather than described.
 
 ### 2. One page, two audiences — not two sites
@@ -60,11 +60,11 @@ pages, and neither version is a teaser — both are the whole argument.
 
 ## Navigation
 
-Five items: **Dossiers · Magazine · Lab · Learn · Community**
+Five items: **Topics · Magazine · Lab · Learn · Community**
 
 The roadmap lists six spaces, but Newsletter is an *action*, not a place, so it
 is a persistent CTA in the header and footer rather than a nav slot. There is
-deliberately no "Watch" item either: here a video opens a dossier, it is not a
+deliberately no "Watch" item either: here a video opens a topic, it is not a
 destination of its own.
 
 ## What actually works
@@ -80,7 +80,7 @@ Not mockups:
 - **Lorenz simulation** — two identical systems started a hair apart. Set the
   initial precision and watch the prediction horizon collapse; divergence time is
   reported live.
-- **Hero** — two-body orbit, pucker grid with click-ripple, comet cursor
+- **Hero** — two-body orbit (draggable on touch), pucker grid with click-ripple, comet cursor
 - **Generative card art** — lab cards draw themselves instead of shipping photos
 
 Polls, comments and sign-up forms are front-end only, and say so on screen rather
@@ -109,7 +109,7 @@ than pretending to be live.
 **The depth switch is now contextual.** It was rendering on all eleven pages but
 only doing something on one. A persistent control that is inert nine times out of
 eleven teaches people to ignore it, and then it is invisible on the pages where
-it matters. It now appears only on the dossier and the magazine — the two places
+it matters. It now appears only on the topic and the magazine — the two places
 that respond to it.
 
 **The magazine gained a second axis.** Depth now works there as reading level
@@ -118,7 +118,7 @@ In depth. They are dimmed rather than hidden, because a list whose count silentl
 drops looks broken.
 
 **A real article page.** `article-hypothesis-or-sentence.html` is the lead essay
-built out — two depths, its own graded sources, and a hand-off to the dossier,
+built out — two depths, its own graded sources, and a hand-off to the topic,
 the game and the open question. It doubles as the Magazine template.
 
 **Nothing is a dead click any more.** Cards for content that does not exist yet
@@ -144,17 +144,17 @@ so it failed on exactly the one page that loads `hero.js`. The duplicate is gone
 | Console errors | none on any page |
 | Accessibility | one `h1` per page, skip link, `lang`, no unlabelled buttons, no missing `alt` |
 | Mobile menu | opens, closes on selection, navigates |
-| Depth switch | +597px of content on the dossier, persists across pages |
-| Dossier simulation | animating and responds to its control |
+| Depth switch | +597px of content on the topic, persists across pages |
+| Topic simulation | animating and responds to its control |
 
 The only remaining `href="#"` are the five social icons — outbound profiles for
 you to fill in, not missing pages.
 
 ## Second pass
 
-**Dossier 03 is now built out.** The roadmap names AI and ML in scientific
+**Topic 03 is now built out.** The roadmap names AI and ML in scientific
 research as the starting point, but the site was leading with *Is the universe
-computable?* — a strategic mismatch. `dossier-machine-hypothesis.html` carries
+computable?* — a strategic mismatch. `topic-machine-hypothesis.html` carries
 all seven layers and the roadmap's harder questions rather than a
 tools-and-prompts tour.
 
@@ -172,8 +172,8 @@ twice gives the same clean result.
 
 ## Known gaps
 
-Content, not structure: two dossiers of four, one article, one path of four, one
-game of six. The generators mean the next dossier is data entry rather than a
+Content, not structure: two topics of four, one article, one path of four, one
+game of six. The generators mean the next topic is data entry rather than a
 rebuild.
 
 
@@ -181,7 +181,7 @@ rebuild.
 
 ## Third pass
 
-**Hero** now reads *Science, and the gravity of questions underneath it*, with
+**Hero** read *Science, and the gravity of questions underneath it*, with
 **gravity** carrying the emphasis.
 
 **Grids no longer orphan a card.** `auto-fit` packs as many as will fit and
@@ -201,12 +201,12 @@ rather than navigated, deep-linkable via `#in` and `#up`, with role selection at
 sign-up. A **Sign in** action sits in the header on all fourteen pages.
 
 **The host is only on About.** Name and photo removed from the hero, the footer,
-the dossier byline and the sample comment, ready for other contributors.
+the topic byline and the sample comment, ready for other contributors.
 
-**Design-system corrections.** Dossier 03's poll was a bespoke component; it now
-uses the same result-bar poll as the other dossiers. The lab's number entry
+**Design-system corrections.** Topic 03's poll was a bespoke component; it now
+uses the same result-bar poll as the other topics. The lab's number entry
 suppressed the browser spin buttons — small grey chrome that was the ugliest
-thing on the page — and reads as a value you are about to test. Both dossier
+thing on the page — and reads as a value you are about to test. Both topic
 simulations were pinned to the top of their panel and are now vertically centred
 (20px above and below).
 
@@ -233,7 +233,7 @@ the display its own CSS gives it. Measured across a switch: badge width and link
 position identical, `display: flex` in both states. It also means the content is
 all visible with no JavaScript at all.
 
-**Dossier 04's simulation fills its panel.** The attractor was drawn from a fixed
+**Topic 04's simulation fills its panel.** The attractor was drawn from a fixed
 baseline at 62% of the height and extends upward from there, so the bottom of the
 box was empty — the panel was centred but the figure inside it was not. It now
 measures the trajectory's own bounds and derives scale and offset from them:
@@ -258,17 +258,51 @@ extent once, on resize only, so the view is constant: 42px above, 40px below,
 zero drift between samples. (Hoisting caught me out on the way: `var VIEW` was
 declared after its first use, so the script threw and nothing drew at all.)
 
-**Dossier 03 was never actually designed.** I had invented `dsr-head`,
+**Topic 03 was never actually designed.** I had invented `dsr-head`,
 `dsr-rail` and `tl` class names that exist nowhere in the stylesheet, so the
 page fell back to unstyled defaults — content against the top edge, and a
 section rail with no spacing between its links. It is now built from the same
-components as Dossier 04 (`head_block`, `.layer`, `.dossier-nav`, `.split`,
+components as Topic 04 (`head_block`, `.layer`, `.topic-nav`, `.split`,
 `.video`), and the timeline is a dated list rather than a decorated one.
 
 **Also:** footer icons reordered — YouTube, Instagram, TikTok, X, LinkedIn,
 Telegram. About's introduction cut to about a third, team cards enlarged with
-LinkedIn and Google Scholar links. The host's comment restored in Dossier 04.
+LinkedIn and Google Scholar links. The host's comment restored in Topic 04.
 Sign-in row separated from the submit button. The community's "How it works"
 card now sits level with the poll (0px difference). The join block reduced to one
 dominant line and one quiet answer. The magazine drop cap set to a true two-line
 cap, so nothing is left hanging under it.
+
+## Sixth pass
+
+**Dossiers are Topics.** The word is gone from the interface, the copy, the class
+names (`.topic-nav`), the custom property (`--g-topic-nav-h`) and the filenames —
+`topics.html`, `topic-computable-universe.html`, `topic-machine-hypothesis.html`.
+Renaming the files breaks any link anyone already holds to the old URLs; that is
+a real cost, and worth paying once rather than carrying two vocabularies.
+
+**Hero rewritten.** It now reads *Science, AI and the gravity of underlying
+questions*, with **gravity** still carrying the emphasis, over a lede that names
+what the project is actually about: how science works, how it changes the world,
+and what AI/ML does to research and education. The two calls to action are
+**Explore Topics** and **Try Lab** — the first now goes to the index rather than
+straight into one topic, because sending a first-time reader into a single
+28-minute film was a narrower door than the site deserves. Its icon changed from
+a play triangle to an arrow to match.
+
+**The hero no longer fights the reader's finger.** Two things were wrong on touch.
+A press-and-drag over the hero started a text selection — magnifier, handles, the
+lot — and the gravity interaction was lost behind a selection nobody wanted; hero
+copy is now unselectable on coarse pointers (`user-select`, `touch-callout`, plus
+`selectstart`/`contextmenu` guards in `hero.js` for engines that ignore the CSS).
+Links and buttons keep their long-press menus, and everything below the hero stays
+selectable, quotable and translatable.
+
+Second, there was no way to play with the orbit at all: any drag scrolled the
+page, which fired `pointercancel` and dropped the third mass the moment it
+appeared. There is now a `touch-action: none` patch centred on the pair
+(`.lp-orbit__hit`), sized to about 70% of the canvas so it covers the
+strong-influence radius with margin. Inside it a drag perturbs the orbit; a few
+dozen pixels outside it the page scrolls normally. Locking the whole hero would
+have been simpler and would also have trapped the reader on a screen the orbit
+nearly fills — the escape route is the point.

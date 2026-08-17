@@ -44,6 +44,22 @@
     starBox.appendChild(frag);
   }
 
+  // ---- Touch: the hero is a play surface, not a block of quotable text ------
+  // Press-and-drag over the hero was starting a text selection — magnifier,
+  // handles, the lot — which stole the gesture from the gravity interaction.
+  // CSS user-select does most of the work; these two listeners are the belt to
+  // its braces on engines that let a selection start anyway. Links and buttons
+  // keep their long-press menus, and this whole block is off on a mouse.
+  var coarsePtr = window.matchMedia('(pointer: coarse)').matches;
+  var heroTouchEl = document.getElementById('top');
+  if (coarsePtr && heroTouchEl) {
+    heroTouchEl.addEventListener('selectstart', function (e) { e.preventDefault(); });
+    heroTouchEl.addEventListener('contextmenu', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a, button, input, textarea')) return;
+      e.preventDefault();
+    });
+  }
+
   // ---- Interactive "pucker" grid: the spacetime well bends toward the cursor ----
   var heroEl = document.getElementById('top');
   var gridCanvas = document.getElementById('lp-grid');
