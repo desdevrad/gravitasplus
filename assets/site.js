@@ -1,4 +1,4 @@
-/* Shared behaviour for every page. Kept small and defensive — nothing here
+/* Shared behaviour for every page. Kept small and defensive, nothing here
    should ever be the reason a page fails to render. */
 (function () {
   'use strict';
@@ -10,15 +10,13 @@
      first paint means every light-mode visitor gets a flash of the dark site.
      This module only owns the *toggle* and the broadcast.
 
-     Three states, not two: "system" is a real choice and the default, so
-     someone who has never touched the control follows their OS when it
-     changes at dusk. Pressing the button leaves system and pins a value. */
+     Two states, and dark is the default outright. Following the OS sounded
+     considerate and behaved badly: the same visitor got a dark site on their
+     phone and a light one on a laptop set to auto, from a setting they made
+     for their mail client. The site has a look; you get it until you say
+     otherwise, and saying otherwise is one button. */
   var THEME_KEY = 'gravitas:theme';
-  var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-  function stored() {
-    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
-  }
   function resolved() {
     return document.documentElement.getAttribute('data-theme') || 'dark';
   }
@@ -45,10 +43,6 @@
     apply(next);
   });
 
-  // Follow the OS only while the visitor hasn't expressed a preference.
-  var onScheme = function () { if (!stored()) apply(mqDark.matches ? 'dark' : 'light'); };
-  if (mqDark.addEventListener) mqDark.addEventListener('change', onScheme);
-  else if (mqDark.addListener) mqDark.addListener(onScheme);
 
   /* Read a themed colour channel for canvas work. Returns "r, g, b" so
      callers can build rgba() at whatever alpha they need. */
@@ -59,8 +53,8 @@
   };
 
   /* ---- depth switch ----------------------------------------------------
-     One control, two readings of the same page. The alternative — a separate
-     "for researchers" section — splits the audience at the door and halves the
+     One control, two readings of the same page. The alternative, a separate
+     "for researchers" section, splits the audience at the door and halves the
      value of every piece. This keeps one canonical page and lets the reader
      decide how much of it they want. */
   var DEPTH_KEY = 'gravitas:depth';
@@ -195,7 +189,7 @@
   });
 
   /* ---- reading progress --------------------------------------------------
-     Only on pages that are actually long — an article body or a topic's
+     Only on pages that are actually long, an article body or a topic's
      layers. Putting it on every page would make it chrome, and chrome that
      says nothing is just another thing to ignore. It measures the article,
      not the document, so the footer doesn't count as unread text. */
@@ -243,7 +237,7 @@
         input.focus();
         return;
       }
-      if (note) note.textContent = 'This is a front-end demo — connect it to your mail provider to go live.';
+      if (note) note.textContent = 'This is a front-end demo. Connect it to your mail provider to go live.';
       f.reset();
     });
   });

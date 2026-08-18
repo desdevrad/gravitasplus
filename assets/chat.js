@@ -1,5 +1,5 @@
 /* =========================================================================
-   GRAVITAS+ — ASK GRAVITAS
+   GRAVITAS+, ASK GRAVITAS
    A floating assistant available on every page.
 
    On the honesty of it: there is no backend here, and a widget that invents
@@ -16,7 +16,7 @@
    The endpoint receives { message, history, page } as JSON and should reply
    with { reply: "..." } (optionally { links: [{label, href}] }). Everything
    below then defers to it, and the local index becomes the fallback for when
-   that call fails — which is the behaviour you want at 3am anyway.
+   that call fails, which is the behaviour you want at 3am anyway.
    ========================================================================= */
 (function () {
   'use strict';
@@ -35,7 +35,7 @@
     },
     {
       k: 'magazine article essay read writing archive blog',
-      a: 'The Magazine is the written side — narrative and analytical pieces that stand on their own rather than supporting a film. Most run 8–20 minutes.',
+      a: 'The Magazine is the written side: narrative and analytical pieces that stand on their own rather than supporting a film. Most run 8–20 minutes.',
       l: [['Magazine', 'magazine.html']]
     },
     {
@@ -45,12 +45,12 @@
     },
     {
       k: 'learn learning path course curriculum study order beginner start where do i start new here',
-      a: 'Learning Paths are the ordered version of the archive — a route that assumes you are starting somewhere specific. "AI in Research" is the one that is live; the others are being built.',
+      a: 'Learning Paths are the ordered version of the archive, a route that assumes you are starting somewhere specific. "AI in Research" is the one that is live; the others are being built.',
       l: [['Learning Paths', 'learn.html'], ['AI in Research', 'path-ai-in-research.html']]
     },
     {
       k: 'community join member role contribute volunteer help translate review discuss forum people group',
-      a: 'The community is the point, not the afterthought. There are six roles — Reader, Researcher, Translator, Critic, Builder and Host — and you can hold more than one. Members propose the next Topic, vote on it, and argue with the conclusions in public.',
+      a: 'The community is the point, not the afterthought. There are six roles (Reader, Researcher, Translator, Critic, Builder and Host) and you can hold more than one. Members propose the next Topic, vote on it, and argue with the conclusions in public.',
       l: [['Join Us', 'community.html#join'], ['See the roles', 'community.html']]
     },
     {
@@ -60,17 +60,17 @@
     },
     {
       k: 'account sign in log in register password profile free cost price pay subscription paywall',
-      a: 'Everything on the site is free to read and free to play, and there is no paywall planned. An account is optional — it follows Topics, keeps your place in a path, and lets you put your name to an argument.',
+      a: 'Everything on the site is free to read and free to play, and there is no paywall planned. An account is optional. It follows Topics, keeps your place in a path, and lets you put your name to an argument.',
       l: [['Create an account', 'account.html'], ['Sign in', 'account.html#in']]
     },
     {
       k: 'about who what is gravitas team behind contact mission why',
-      a: 'Gravitas+ is a media project, an interactive lab and a community, working on how science actually gets made — and on what AI is doing to research and teaching. The About page has the editorial rules, which are the interesting part.',
+      a: 'Gravitas+ is a media project, an interactive lab and a community, working on how science actually gets made, and on what AI is doing to research and teaching. The About page has the editorial rules, which are the interesting part.',
       l: [['About', 'about.html']]
     },
     {
       k: 'field fields discipline biology chemistry medicine climate psychology economics social science neuroscience ecology engineering statistics physics maths relevant for me my subject',
-      a: 'Every field, deliberately. The questions here are the ones every discipline shares — what counts as evidence, how a hypothesis earns its keep, who funds the work, what peer review really catches. Examples get drawn from biology, medicine, climate, psychology and economics as readily as from physics.',
+      a: 'Every field, deliberately. The questions here are the ones every discipline shares: what counts as evidence, how a hypothesis earns its keep, who funds the work, what peer review really catches. Examples get drawn from biology, medicine, climate, psychology and economics as readily as from physics.',
       l: [['Browse Topics', 'topics.html'], ['Community', 'community.html']]
     },
     {
@@ -80,7 +80,7 @@
     },
     {
       k: 'dark light mode theme colour color night bright toggle switch',
-      a: 'Both. The control is the sun/moon button in the header — it follows your system setting until you pick one, and remembers your choice after that.',
+      a: 'Both. The control is the sun/moon button in the header. Dark is the default until you pick otherwise, and your choice is remembered after that.',
       l: []
     },
     {
@@ -101,7 +101,7 @@
     'How do I join?'
   ];
 
-  var FALLBACK = 'I could not match that to anything on the site, and I would rather say so than invent an answer. The Topics index and the Community page are the two best places to look — or ask me about the Lab, the learning paths, accounts or the newsletter.';
+  var FALLBACK = 'I could not match that to anything on the site, and I would rather say so than invent an answer. The Topics index and the Community page are the two best places to look, or ask me about the Lab, the learning paths, accounts or the newsletter.';
 
   /* ---- Matching ----------------------------------------------------------
      Word overlap, with a length guard so that "a" and "is" don't decide the
@@ -146,7 +146,7 @@
   root.innerHTML =
     '<div class="gchat__panel" id="gchat-panel" role="dialog" aria-label="Ask Gravitas+" aria-modal="false">' +
       // A lockup and a close, nothing else. The old header put the mark in a
-      // bordered circle (which reads as an avatar — this is a logo, not a
+      // bordered circle (which reads as an avatar, this is a logo, not a
       // person) above a mono uppercase strapline that repeated the note at the
       // foot of the panel. Saying it twice, once in the loudest treatment in
       // the widget, made the header the busiest part of a thing whose job is
@@ -180,7 +180,7 @@
 
   foot.textContent = CFG.endpoint
     ? 'Answers may be wrong. Check anything that matters.'
-    : 'Guided search, not a chatbot — it answers from an index of this site.';
+    : 'Guided search, not a chatbot. It answers from an index of this site.';
 
   /* ---- Rendering --------------------------------------------------------- */
   function bubble(who, text, links) {
@@ -280,7 +280,7 @@
     if (open) {
       if (!greeted) {
         greeted = true;
-        bubble('bot', 'Hello. I know what is on this site and where to find it — Topics, the Lab, learning paths, the community, accounts. What are you after?');
+        bubble('bot', 'Hello. I know what is on this site and where to find it: Topics, the Lab, learning paths, the community, accounts. What are you after?');
         renderChips();
       }
       // Not on touch: focusing the field summons the keyboard over the panel
@@ -308,7 +308,7 @@
     input.style.height = Math.min(input.scrollHeight, 96) + 'px';
   });
 
-  /* Any link in the panel is a normal navigation, so close first — otherwise
+  /* Any link in the panel is a normal navigation, so close first, otherwise
      the widget re-renders on the new page with the panel shut anyway and the
      transition looks like a bug. */
   log.addEventListener('click', function (e) {

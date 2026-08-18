@@ -1,4 +1,4 @@
-// Reveal on scroll — no-op under reduced motion (system CSS zeroes transitions)
+// Reveal on scroll, no-op under reduced motion (system CSS zeroes transitions)
 (function () {
   var els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('is-in'); }); return; }
@@ -10,12 +10,12 @@
   // The mobile menu is owned by site.js, which is loaded on every page.
   // It used to be bound here as well; both handlers fired on the same tap,
   // the second read the state the first had just set, and the menu toggled
-  // straight back shut — so it only ever failed on the one page that loads
+  // straight back shut, so it only ever failed on the one page that loads
   // this file.
 
   // ---- Theme palette -------------------------------------------------------
   // A canvas can't inherit a CSS colour, so every simulation below used to have
-  // White Tint hard-coded — which is exactly why the hero survived the light
+  // White Tint hard-coded, which is exactly why the hero survived the light
   // theme as invisible white-on-cream. The channels live in gravitas.css; this
   // reads them once, and again whenever the theme flips. Subsystems register a
   // repaint hook rather than each listening for themselves, so a flip is one
@@ -70,8 +70,8 @@
   }
 
   // ---- Touch: the hero is a play surface, not a block of quotable text ------
-  // Press-and-drag over the hero was starting a text selection — magnifier,
-  // handles, the lot — which stole the gesture from the gravity interaction.
+  // Press-and-drag over the hero was starting a text selection, magnifier,
+  // handles, the lot, which stole the gesture from the gravity interaction.
   // CSS user-select does most of the work; these two listeners are the belt to
   // its braces on engines that let a selection start anyway. Links and buttons
   // keep their long-press menus, and this whole block is off on a mouse.
@@ -150,7 +150,7 @@
     }
 
     // Touch: there is no hover, so the well bends where the finger presses and
-    // eases back to rest when it lifts. Scrolling still works — a scroll fires
+    // eases back to rest when it lifts. Scrolling still works, a scroll fires
     // pointercancel, which releases the bend just like lifting off.
     heroEl.addEventListener('pointerdown', function (e) {
       if (e.pointerType !== 'touch') return;
@@ -175,7 +175,7 @@
     var gridDirty = true, lastOn = -1, lastAx = -1, lastAy = -1;
     // A theme change alters the ink without altering the warp, so the
     // frame-skip test below would happily keep the previous theme's frame
-    // on screen — the grid appeared to vanish until the pointer moved.
+    // on screen, the grid appeared to vanish until the pointer moved.
     themeHooks.push(function () { gridDirty = true; });
     function drawGrid() {
       ambient.x = GW * 0.5; ambient.y = GH * 0.46;
@@ -185,7 +185,7 @@
       amp.x += (ptr.x - amp.x) * 0.2;
       amp.y += (ptr.y - amp.y) * 0.2;
 
-      // Skip the redraw when nothing about the warp has changed — the canvas
+      // Skip the redraw when nothing about the warp has changed, the canvas
       // keeps its last frame, so an idle grid costs nothing.
       if (Math.abs(amp.on - lastOn) < 0.002 &&
           Math.abs(amp.x - lastAx) < 0.4 &&
@@ -302,7 +302,7 @@
       lastCometT = now;
       ctx.clearRect(0, 0, W, H);
       if (inside) {
-        // ease the head toward the pointer — gives the tail a natural lag
+        // ease the head toward the pointer, gives the tail a natural lag
         head.x += (target.x - head.x) * 0.35;
         head.y += (target.y - head.y) * 0.35;
 
@@ -326,7 +326,7 @@
       ctx.globalAlpha = 1;
       particles = particles.filter(function (p) { return p.life > 0; });
 
-      // draw the comet head — bright core + soft glow
+      // draw the comet head, bright core + soft glow
       if (inside) {
         // ease toward a larger head when over an interactive element
         hoverScale += ((overHit ? 1.9 : 1) - hoverScale) * 0.18;
@@ -345,7 +345,7 @@
         ctx.arc(head.x, head.y, 2.4 * hoverScale, 0, Math.PI * 2);
         ctx.fill();
 
-        // a thin ring appears over hit targets — extra confirmation of "clickable"
+        // a thin ring appears over hit targets, extra confirmation of "clickable"
         if (hoverScale > 1.08) {
           ctx.strokeStyle = 'rgba(' + INK.line + ',' + ((hoverScale - 1) * 0.5).toFixed(3) + ')';
           ctx.lineWidth = 1.2;
@@ -360,8 +360,8 @@
   }
 
   // ---- Rare meteors ------------------------------------------------------
-  // Occasional small streaks that fade in and out. Deliberately infrequent —
-  // one every 8–18s, never more than two at once — so it reads as a happy
+  // Occasional small streaks that fade in and out. Deliberately infrequent -
+  // one every 8–18s, never more than two at once, so it reads as a happy
   // accident rather than a weather effect.
   var meteorCanvas = document.getElementById('lp-meteors');
   if (heroEl && meteorCanvas && !reduce) {
@@ -451,23 +451,23 @@
   }
   // Own scope: the comet above declares its own W, H, frame and step.
   // `var` is function-scoped and function declarations hoist, so without
-  // this IIFE the two subsystems overwrite each other — which silently
+  // this IIFE the two subsystems overwrite each other, which silently
   // stopped the comet from ever clearing its tail.
   (function () {
     // ---- Two-body orbit, perturbed by the cursor ----------------------------
     // The pair is a real Kepler two-body system: exactly periodic, exactly
     // solvable, and therefore a well-defined "original state" to return to.
     //
-    //   Reference  — advanced analytically. Mean anomaly steps linearly, Kepler's
+    //   Reference , advanced analytically. Mean anomaly steps linearly, Kepler's
     //                equation is solved by Newton, so the closed orbit never
     //                drifts no matter how long the tab is open.
-    //   Actual     — velocity Verlet on the real accelerations. While the cursor
+    //   Actual    , velocity Verlet on the real accelerations. While the cursor
     //                is away this is held onto the reference by a critically
     //                damped spring, so it *is* the two-body solution.
     //
     // Bring the cursor near and it becomes a third mass: it pulls on both bodies,
     // and the spring holding them to the closed orbit is released in proportion.
-    // That is the whole point — two bodies have a closed form, three do not, and
+    // That is the whole point, two bodies have a closed form, three do not, and
     // the figure falls apart in front of you. Take the cursor away and the spring
     // reels them back onto the analytic ellipse.
     //
@@ -485,7 +485,7 @@
       var SIMRATE = PERIOD / SECS_PER_ORBIT;
       var SPAN = SEMI * (1 + ECC) * 1.9;       // framing, with room to be pushed
 
-      var CURSOR_M = 4.0;                      // mass of the pointer. It was 0.72 —
+      var CURSOR_M = 4.0;                      // mass of the pointer. It was 0.72 -
                                                // lighter than either body, so it
                                                // barely pulled. Now it dominates.
       var SOFT = 0.060;                        // softening, so nothing goes singular
@@ -497,7 +497,7 @@
       // Brand palette, read from the theme rather than fixed. On dark the two
       // bodies are White Tint and Sisal against deep space; on light they are
       // ink and bronze on paper. The sprites are pre-rendered for speed, so a
-      // theme change has to rebuild them — hence the hook.
+      // theme change has to rebuild them, hence the hook.
       var RGB = [], TRAILCAP = 360;
       var SPRITE = 64;
       var SPRITE_R = [19, 16, 15];
@@ -575,7 +575,7 @@
       }
 
       // Reference two-body state from the mean anomaly. Kepler's equation by
-      // Newton — 4 iterations is plenty at this eccentricity.
+      // Newton, 4 iterations is plenty at this eccentricity.
       function reference() {
         var m = manom % (2 * Math.PI);
         var E = m + ECC * Math.sin(m);
@@ -653,7 +653,7 @@
 
       // Chunked so the tail can fade along its length: each chunk is one stroke at
       // its own alpha. Chunk counts and the point stride are kept deliberately low
-      // — this runs every frame forever, and the trail is a smooth curve, so
+      //, this runs every frame forever, and the trail is a smooth curve, so
       // drawing every stored point buys nothing visible.
       function drawTrail(bi, alphaMul) {
         var n = tcount[bi];
@@ -696,10 +696,10 @@
         octx.clearRect(0, 0, W, H);
         // 'lighter' adds toward white: on deep space that is how two overlapping
         // glows read as brighter. On a cream page it fades them out instead, so
-        // the light theme composites normally. Cached — this runs 60 times a
+        // the light theme composites normally. Cached, this runs 60 times a
         // second and the answer only changes when the toggle is pressed.
         octx.globalCompositeOperation = blendMode;
-        // The cursor is already drawn — it's the comet, on its own canvas above
+        // The cursor is already drawn, it's the comet, on its own canvas above
         // this one. Drawing a second body here just doubled it and smeared a
         // hero-wide trail across the frame. The pointer's *gravity* still acts;
         // only its rendering belongs to the comet.
@@ -713,7 +713,7 @@
         if (p === wasPerturbed) return;
         wasPerturbed = p;
         if (nameEl) nameEl.textContent = p ? 'Three-body problem' : 'Two-body orbit';
-        if (subEl)  subEl.textContent  = p ? 'chaotic — no closed-form solution'
+        if (subEl)  subEl.textContent  = p ? 'chaotic, no closed-form solution'
                                            : 'closed, periodic, exactly solvable';
       }
 
@@ -722,8 +722,8 @@
       // Pointer → third mass. Distance does the gating, so the perturbation eases
       // in as you approach from anywhere in the hero; no enter/leave needed.
       // Read the box fresh each time. It was cached and only refreshed on scroll
-      // and resize, so any other reflow — a late web font, an image landing, a
-      // revealed section — left the mapping stale and the cursor's gravity
+      // and resize, so any other reflow, a late web font, an image landing, a
+      // revealed section, left the mapping stale and the cursor's gravity
       // acting somewhere it wasn't. One getBoundingClientRect per pointermove is
       // cheap; being wrong is not.
       function pointerTo(clientX, clientY) {
@@ -785,7 +785,7 @@
         var simDt = dtReal * SIMRATE, SUB = 16, h = simDt / SUB;
         for (var s = 0; s < SUB; s++) step(h);
 
-        // safety: a hard perturbation can still throw a body wide — if it leaves
+        // safety: a hard perturbation can still throw a body wide, if it leaves
         // the frame entirely, put the system back rather than lose it.
         if (!isFinite(X[0]) || !isFinite(X[1]) ||
             Math.abs(X[0]) > 9 || Math.abs(Y[0]) > 9 ||
@@ -803,7 +803,7 @@
       seed();
       sizeOrbit();
       window.addEventListener('resize', sizeOrbit);
-    // The canvas can change size without the window doing so — fonts arriving,
+    // The canvas can change size without the window doing so, fonts arriving,
     // the grid reflowing. Watch the element itself rather than guessing.
     if (window.ResizeObserver) {
       var ro = new ResizeObserver(function () { sizeOrbit(); });

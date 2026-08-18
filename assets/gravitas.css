@@ -2,7 +2,7 @@
    GRAVITAS+ DESIGN SYSTEM  ·  v1.0
    A single stylesheet for the Gravitas+ website and web marketing.
 
-   Structure (CSS cascade layers — later layers win, so component styles
+   Structure (CSS cascade layers, later layers win, so component styles
    never get out-fought by a stray utility or base rule):
      1. tokens      primitive + semantic custom properties
      2. base        reset, document defaults, typography defaults
@@ -21,7 +21,7 @@
    ========================================================================== */
 @layer tokens {
   :root {
-    /* ---- Brand primitives — the four fixed colours ------------------- */
+    /* ---- Brand primitives, the four fixed colours ------------------- */
     --g-cosmos-blue: #003049;
     --g-sisal:       #d4c9be;
     --g-royal-black: #030303;
@@ -29,12 +29,12 @@
 
     /* ---- Cosmos ramp -------------------------------------------------
        Every surface value is Cosmos Blue mixed toward black or light.
-       One hue, six depths — this is how the palette stays strict while
+       One hue, six depths, this is how the palette stays strict while
        still supporting a real interface. Do not add hues here.          */
     --g-cosmos-900: #01121c;  /* the void behind everything */
     --g-cosmos-800: #011f30;  /* sunken: wells, insets, code */
     --g-cosmos-700: #00263a;  /* page background at rest */
-    --g-cosmos-600: #003049;  /* base surface — the brand anchor */
+    --g-cosmos-600: #003049;  /* base surface, the brand anchor */
     --g-cosmos-500: #013a58;  /* raised: cards, menus */
     --g-cosmos-400: #01486d;  /* hovered / lifted */
     --g-cosmos-300: #1c6288;  /* pressed, active rails */
@@ -58,7 +58,7 @@
     --g-focus:             var(--g-white-tint);
 
     /* ---- Signal colours ----------------------------------------------
-       Functional feedback only — form errors, build status, alerts.
+       Functional feedback only, form errors, build status, alerts.
        Never decorative, never a background, never in marketing art.
        Kept low-chroma so they read as neighbours of the palette rather
        than as new brand colours.                                        */
@@ -69,7 +69,7 @@
     /* ---- Type --------------------------------------------------------- */
     --g-font: "DM Sans", system-ui, -apple-system, "Segoe UI", Inter, Arial, sans-serif;
     /* DM Mono is DM Sans's sibling. Scoped strictly to code, data and
-       physics notation — the one place a single sans can't do the job. */
+       physics notation, the one place a single sans can't do the job. */
     --g-font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
     --g-w-thin: 100;  --g-w-extralight: 200; --g-w-light: 300;
@@ -100,7 +100,7 @@
 
     --g-measure: 68ch;   /* long-form line length */
 
-    /* ---- Space — 4px base ---------------------------------------------- */
+    /* ---- Space, 4px base ---------------------------------------------- */
     --g-space-3xs: 0.25rem;  --g-space-2xs: 0.5rem;  --g-space-xs: 0.75rem;
     --g-space-sm:  1rem;     --g-space-md:  1.5rem;  --g-space-lg: 2rem;
     --g-space-xl:  3rem;     --g-space-2xl: 4rem;    --g-space-3xl: 6rem;
@@ -136,7 +136,7 @@
     --g-well-image: url("assets/spacetime-well.svg");
 
     /* ---- Motion ---------------------------------------------------------
-       ease-orbit: decisive departure, long settle — things arrive the way
+       ease-orbit: decisive departure, long settle, things arrive the way
        a body settles into orbit rather than snapping into place.         */
     --g-ease-orbit: cubic-bezier(0.16, 1, 0.3, 1);
     --g-ease-fall:  cubic-bezier(0.55, 0, 0.35, 1);
@@ -151,7 +151,7 @@
        Everything below is a value that has to *flip* between dark and light.
        They live here as named channels rather than as literals scattered
        through the component files, because the old code had the dark values
-       hard-coded in ninety-odd places — which is precisely why there was no
+       hard-coded in ninety-odd places, which is precisely why there was no
        light mode. Adding one meant finding them all once.                 */
 
     /* Ink used for translucent overlays: hover washes, tracks, scrims.
@@ -163,7 +163,7 @@
        the accent or borrowing a fifth hue. */
     --g-accent: var(--g-sisal);
 
-    /* Sticky chrome (header, topic sub-nav) — a translucent slab of the page
+    /* Sticky chrome (header, topic sub-nav), a translucent slab of the page
        background rather than a fixed colour. */
     --g-chrome: 0 38 58;
     --g-chrome-a: 0.72;
@@ -187,7 +187,7 @@
 
   /* ---- Light theme ------------------------------------------------------
      A real second mode, not the inversion below. The brand is a night sky, so
-     the light theme is not "the same page with the lights on" — the star
+     the light theme is not "the same page with the lights on", the star
      field, meteors and deep-space gradients switch off entirely rather than
      rendering as grey noise on paper. What survives is the structure: Cosmos
      Blue as ink, White Tint as ground, Sisal darkened to bronze as accent.  */
@@ -245,7 +245,7 @@
   }
 
   /* Ordinary page transitions shouldn't animate, but a theme flip that snaps
-     is jarring — the whole field changes at once. A short cross-fade on the
+     is jarring, the whole field changes at once. A short cross-fade on the
      two properties that actually carry the theme is enough; anything longer
      and the toggle feels laggy. */
   :root[data-theme] body,
@@ -256,7 +256,7 @@
                 color 260ms var(--g-ease-orbit);
   }
 
-  /* Light inversion — press releases, print-alike pages, embeds on white.
+  /* Light inversion, press releases, print-alike pages, embeds on white.
      Predates the light theme and is kept because it is scoped to a *block*
      rather than the document: it inverts one panel inside an otherwise dark
      page, which the theme cannot do. */
@@ -467,7 +467,7 @@
 
   /* ---- The Spacetime Well ----------------------------------------------
      The signature background layer: a coordinate grid curved by a mass.
-     Drop it inside any position:relative block. It whispers — opacity
+     Drop it inside any position:relative block. It whispers, opacity
      stays low, and content always sits above it.                        */
   .g-well {
     position: absolute; inset: 0;
@@ -606,7 +606,7 @@
     box-shadow: var(--g-glow-sm), var(--g-shadow);
   }
 
-  /* Video card — the channel's core content object */
+  /* Video card, the channel's core content object */
   .g-video-card { padding: 0; }
   .g-video-card__thumb {
     position: relative; aspect-ratio: 16 / 9;
@@ -627,7 +627,7 @@
   }
   .g-video-card__content { padding: var(--g-space-sm) var(--g-space-md) var(--g-space-md); display: flex; flex-direction: column; flex: 1; }
 
-  /* Stat — one number, one label. Used sparingly. */
+  /* Stat, one number, one label. Used sparingly. */
   .g-stat__value {
     font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
     font-weight: var(--g-w-bold);
@@ -774,7 +774,7 @@
     color: var(--g-text-muted); text-transform: uppercase; letter-spacing: 0.12em;
   }
 
-  /* ---- Prose — long-form article body ---------------------------------------- */
+  /* ---- Prose, long-form article body ---------------------------------------- */
   .g-prose { max-width: var(--g-measure); font-size: var(--g-fs-lead); }
   .g-prose > * + * { margin-top: var(--g-space-sm); }
   .g-prose h2 { margin-top: var(--g-space-xl); }

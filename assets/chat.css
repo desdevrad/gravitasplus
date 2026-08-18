@@ -1,5 +1,5 @@
 /* =========================================================================
-   GRAVITAS+ — ASK GRAVITAS
+   GRAVITAS+, ASK GRAVITAS
    A floating assistant, on every page. Built on the same tokens as everything
    else, so it inherits both themes without a single hard-coded colour.
 
@@ -16,7 +16,7 @@
 
 /* ---- Launcher -----------------------------------------------------------
    One control, one job: open. It used to morph into an X while the panel was
-   also showing a close button in its header — two ways to shut the same thing,
+   also showing a close button in its header, two ways to shut the same thing,
    six inches apart, which makes a reader stop and choose. Now the launcher
    simply gets out of the way, and the panel's own close is the only close.
    It stays in the layout while hidden, because the panel is anchored to it. */
@@ -37,7 +37,7 @@
 .gchat__btn:hover { transform: translateY(-2px); }
 .gchat__btn .gchat__spark { width: 1.3rem; height: 1.3rem; flex: none; }
 /* visibility has to be named in the transition list, not just given a delay in
-   `transition-delay` — a delay on a property that isn't being transitioned is
+   `transition-delay`, a delay on a property that isn't being transitioned is
    ignored, and the button would snap out of existence mid-fade. */
 .gchat.is-open .gchat__btn {
   opacity: 0; transform: scale(0.85); visibility: hidden;
@@ -46,7 +46,7 @@
               visibility 0s linear 160ms;
 }
 @media (max-width: 560px) {
-  /* On a phone the label costs a third of the thumb zone for no information —
+  /* On a phone the label costs a third of the thumb zone for no information -
      the mark already reads as "the assistant". */
   .gchat__btn { width: 3.25rem; padding: 0; justify-content: center; }
   .gchat__btn span { display: none; }
@@ -59,7 +59,7 @@
    the frame the class came off. Visibility is, if you delay it past the fade. */
 .gchat__panel {
   /* Anchored to the bottom of the widget, not above the launcher. Sitting it
-     above left the launcher's own height as a band of nothing under the panel —
+     above left the launcher's own height as a band of nothing under the panel -
      and since the launcher hides while the panel is open, that band was empty.
      The panel simply takes the space instead. */
   position: absolute; right: 0; bottom: 0;
@@ -92,7 +92,7 @@
 
 /* ---- Panel header -------------------------------------------------------
    Was: a bordered circle holding the mark like a profile picture, a title, and
-   a mono uppercase strapline reading "FIND YOUR WAY AROUND" — which said the
+   a mono uppercase strapline reading "FIND YOUR WAY AROUND", which said the
    same thing as the note at the foot of the panel, one line below the name and
    in the loudest treatment in the widget. A logo does not need a container to
    be a logo, and the honesty line only needs saying once. What is left is a
@@ -229,6 +229,6 @@
 
 /* The hero's orbit is a drag target on touch and the launcher is fixed over
    the page. They never overlap on desktop, but on a short phone in landscape
-   the button can land on the canvas — so it gets out of the way while a drag
+   the button can land on the canvas, so it gets out of the way while a drag
    is in progress. */
 .gchat.is-dragging-hero { opacity: .25; pointer-events: none; }

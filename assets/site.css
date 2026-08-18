@@ -1,13 +1,13 @@
 /* =========================================================================
-   GRAVITAS+ — SITE COMPONENTS
+   GRAVITAS+, SITE COMPONENTS
    Built on top of gravitas.css (the design system). Everything here is a
    component the new architecture needs and the old single-page site didn't.
    ========================================================================= */
 
 /* ---- the signature texture, available to every page ---------------------
    .g-well lives in the design system, but the image it draws was declared only
-   in hero.css. Any page that didn't load the home page's stylesheet — About,
-   Community, Account — rendered the well as an empty box, which is why their
+   in hero.css. Any page that didn't load the home page's stylesheet, About,
+   Community, Account, rendered the well as an empty box, which is why their
    CTA panels came out flat while the identical panel on the home page carried
    the curved grid. The file is already in assets/; point at it here, where
    every page can see it. */
@@ -25,7 +25,7 @@
 @media (max-width: 720px) {
   /* Collapse the CTA to a circular icon button that sits beside the hamburger.
      (The old rule targeted `.lp-header__cta .g-btn span`, but the class is on the
-     button itself — so it never matched, the full label stayed, and the burger
+     button itself, so it never matched, the full label stayed, and the burger
      wrapped onto a second line.) */
   .lp-header__cta span { display: none; }
   .lp-header__cta {
@@ -43,7 +43,7 @@
   .lp-menu-btn[aria-expanded="true"] { background: rgb(var(--g-tint) / 0.12); border-color: var(--g-border-strong); }
 
   /* The dropdown panel lives entirely in CSS so nothing leaks back to desktop.
-     Only the .is-open class is toggled — no inline styles. */
+     Only the .is-open class is toggled, no inline styles. */
   .g-nav {
     display: none;
     position: absolute; top: calc(100% + 0.5rem); right: 0;
@@ -70,23 +70,23 @@
 /* ---- Optical centring for buttons with a leading icon --------------------
    A leading icon pushes the label right of the button's centre. Correcting for
    it *fully* centres the label but leaves the ink block visibly left of centre
-   with a lopsided 1:2 whitespace split — which reads worse than the original
+   with a lopsided 1:2 whitespace split, which reads worse than the original
    problem. So compensate partially: shift by ~45% of the icon+gap width. The
    label lands a few px right of centre, the ink a few px left, and the two
    errors cancel to the eye.
 
    Driven by an explicit class rather than :has(), so every browser resolves it
-   the same way — with :has() the correction silently vanished wherever it
+   the same way, with :has() the correction silently vanished wherever it
    wasn't supported, giving two different buttons. */
 /* Without correction the label sits (icon + gap)/2 right of centre. Shifting by
-   exactly half of that splits the error evenly between label and ink — the
+   exactly half of that splits the error evenly between label and ink, the
    minimax compromise. Expressed in em so it tracks each button size on its own:
    6px on --lg, 5.5px default, 5.25px on --sm. */
 .g-btn--lead { --_shift: calc((1em + 0.5rem) / 4); }
 .g-btn--lead    { padding-left: calc(1.5rem - var(--_shift)); padding-right: calc(1.5rem + var(--_shift)); }
 .g-btn--lead.g-btn--lg { padding-left: calc(2rem   - var(--_shift)); padding-right: calc(2rem   + var(--_shift)); }
 .g-btn--lead.g-btn--sm { padding-left: calc(1rem   - var(--_shift)); padding-right: calc(1rem   + var(--_shift)); }
-/* the header CTA collapses to an icon-only circle on mobile — no label to centre */
+/* the header CTA collapses to an icon-only circle on mobile, no label to centre */
 @media (max-width: 720px) { .lp-header__cta.g-btn--lead { padding: 0; } }
 
 /* ---- Topic filter row (PBS season selector) ---- */
@@ -102,7 +102,7 @@
 .g-header__inner { position: relative; }
 .gh-actions { display: flex; align-items: center; gap: var(--g-space-2xs); flex: none; flex-wrap: nowrap; }
 
-/* depth switch — the answer to serving two audiences without splitting the
+/* depth switch, the answer to serving two audiences without splitting the
    site in two. It re-renders the page in place instead of sending people
    somewhere else, so nobody has to choose an identity at the door. */
 .depth {
@@ -120,8 +120,8 @@
 .depth button[aria-pressed="true"] { background: var(--g-solid-bg); color: var(--g-solid-fg); }
 .depth button:hover[aria-pressed="false"] { color: var(--g-text); }
 /* The switch is hidden below 900px because it used to live in the header,
-   where there is no room for it on a phone. It does not live there any more —
-   it sits in the .depthbar above the text it governs — so hiding it left the
+   where there is no room for it on a phone. It does not live there any more -
+   it sits in the .depthbar above the text it governs, so hiding it left the
    bar announcing "this essay reads two ways" with no way to pick either.
    Hide it only where it is still chrome. */
 @media (max-width: 900px) { .g-header .depth { display: none; } }
@@ -129,14 +129,14 @@
 /* content that only belongs to one reading level */
 /* Depth visibility.
    This used to force `display: block` when revealing, which stamped on whatever
-   the element's own layout was — a flex list row became a block, its badge lost
+   the element's own layout was, a flex list row became a block, its badge lost
    `flex: none` and stretched, and the text next to it shifted. Hiding is the
    only thing this rule should decide; the element keeps its own display value
    via `revert`, so a row stays a row. */
 /* Only ever hide. `revert` on the revealed element brought back the UA default
    (an li became list-item) rather than the author's own rule, so revealed rows
    laid out differently from the ones already showing. Hiding the other side
-   leaves every visible element with exactly the display its own CSS gives it —
+   leaves every visible element with exactly the display its own CSS gives it -
    and with no JS at all, everything simply shows. */
 body.is-overview [data-level="deep"],
 body.is-deep     [data-level="overview"] { display: none; }
@@ -500,7 +500,7 @@ body.is-deep     [data-level="overview"] { display: none; }
 .rv.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } }
 
-/* ---- Footer social icons — uniform circular buttons, one visual weight ---- */
+/* ---- Footer social icons, uniform circular buttons, one visual weight ---- */
 /* The Elsewhere column needs a little more room than the others so all five
    sit on a single row rather than wrapping 4+1. */
 .g-footer__grid { grid-template-columns: 1.5fr 1fr 1fr 1.35fr; }
@@ -524,7 +524,10 @@ body.is-deep     [data-level="overview"] { display: none; }
   color: var(--g-text); border-color: var(--g-border-strong);
   background: rgb(var(--g-tint) / 0.08); transform: translateY(-2px);
 }
-.lp-social__link svg { width: 1.05rem; height: 1.05rem; display: block; }
+/* Now the glyphs actually fill their 24-unit box, 1.05rem left them
+   floating in a 2.25rem circle, the mark was under 40% of the button.
+   1.2rem puts it at the ~45% that reads as a filled-in icon button. */
+.lp-social__link svg { width: 1.2rem; height: 1.2rem; display: block; }
 
 
 /* ---- reading level on magazine entries --------------------------------
@@ -561,7 +564,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 /* ---- two-line drop cap --------------------------------------------------
    The letter has to sit on two lines exactly: its cap top level with the cap
    top of line one, its baseline sitting on the baseline of line two. The old
-   values did neither — sizing the float against the *line box* rather than the
+   values did neither, sizing the float against the *line box* rather than the
    cap height left the A floating high, meeting neither line.
 
    Worked from DM Sans's real metrics (1000 upem, cap height 700, ascender 992,
@@ -573,7 +576,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
      margin-top so the baselines meet    = 0.15em of that
 
    Browsers that support initial-letter do this arithmetic themselves, from
-   whichever font actually loaded, so let them — the float is the fallback. */
+   whichever font actually loaded, so let them, the float is the fallback. */
 .art__lede::first-letter {
   float: left;
   font-size: 3.4em;
@@ -646,7 +649,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 .is-flat { cursor: default; text-decoration: none; color: var(--g-text-muted); }
 .is-flat:hover { color: var(--g-text-muted); }
 
-/* verdict line under a simulation — states the reading, so the control has a
+/* verdict line under a simulation, states the reading, so the control has a
    consequence in words as well as pixels */
 .play__note { margin: 0; padding: .7rem var(--g-space-md);
   border-top: 1px solid var(--g-hairline); font-size: var(--g-fs-small); }
@@ -656,7 +659,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 
 /* ---- join ---------------------------------------------------------------
    The old version was a form dropped on a flat band. This one borrows the
-   hero's treatment — the well and the starfield behind it, real vertical
+   hero's treatment, the well and the starfield behind it, real vertical
    room, and the roles shown as things you become rather than a sentence
    describing them. */
 .join { position: relative; overflow: hidden; isolation: isolate;
@@ -797,7 +800,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 /* ---- team ---------------------------------------------------------------
    A list, not a one-off block, because more people are coming. The open slot
    is a real card so the section does not look thin at one person. */
-/* One card per row, and generous — these are the people, not a sidebar. */
+/* One card per row, and generous, these are the people, not a sidebar. */
 .team { list-style: none; margin: 0; padding: 0; display: grid;
   grid-template-columns: 1fr; gap: var(--g-space-md); max-width: 54rem; }
 .person { display: flex; gap: var(--g-space-lg); align-items: flex-start;
@@ -842,7 +845,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 @media (max-width: 560px) { .hist li { grid-template-columns: 1fr; gap: .3rem; } }
 
 /* ---- an aside that starts level with the body of the column beside it ----
-   The previous version pushed the aside down with `padding-top: 13rem` — a
+   The previous version pushed the aside down with `padding-top: 13rem`, a
    guess at the height of the heading and lead above the poll. Two things were
    wrong with it. The guess only held at one viewport and one font, so the box
    was never quite level; and because sticky positioning measures the border
@@ -858,7 +861,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 .split--rows > .split__body  { grid-column: 1; grid-row: 2; }
 .split--rows > .aside        { grid-column: 2; grid-row: 2; }
 /* The poll carries its own top margin for the case where it follows text.
-   Here the grid row gap is already the separation, so drop it — otherwise the
+   Here the grid row gap is already the separation, so drop it, otherwise the
    aside sits a margin higher than the box it is levelling with. */
 .split--rows > .split__body > .poll:first-child { margin-top: 0; }
 @media (max-width: 900px) {
@@ -926,12 +929,12 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 
 
 /* =========================================================================
-   LIGHT THEME — the parts a token swap can't reach
+   LIGHT THEME, the parts a token swap can't reach
    -------------------------------------------------------------------------
    Most of the site flips automatically now that surfaces, ink and overlays
    all come from tokens. What is left here are the places where the dark
    design isn't a colour but a *device*: a night sky, a scrim over a dark
-   still, an inline SVG with white strokes baked in. Those don't translate —
+   still, an inline SVG with white strokes baked in. Those don't translate -
    they have to be switched off or redrawn.
    ========================================================================= */
 
@@ -940,14 +943,14 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 :root[data-theme="light"] .g-starfield,
 :root[data-theme="light"] .lp-stars,
 :root[data-theme="light"] .lp-meteors { display: none; }
-/* The comet stays. It is the cursor — the hero sets `cursor: none` and lets the
-   canvas draw the pointer instead — so hiding it in light mode did not remove a
+/* The comet stays. It is the cursor, the hero sets `cursor: none` and lets the
+   canvas draw the pointer instead, so hiding it in light mode did not remove a
    decoration, it removed the mouse pointer. It takes its colour from the tokens
    and composites normally, so on paper it is simply a dark comet. */
 
 /* The well is a single SVG with White Tint strokes, used as a background
    image in three places. Inverting the render is cheaper and more reliable
-   than shipping a second file — alpha is preserved, so only the strokes
+   than shipping a second file, alpha is preserved, so only the strokes
    flip. */
 :root[data-theme="light"] .g-well { filter: invert(1); opacity: 0.16; }
 
@@ -1030,7 +1033,7 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 /* =========================================================================
    LONG-FORM READING COMFORT
    -------------------------------------------------------------------------
-   Topics and Magazine pieces are supposed to be dense — that is the product,
+   Topics and Magazine pieces are supposed to be dense, that is the product,
    and cutting them would be cutting the thing people came for. So the fix on
    these pages is not fewer words but a page that is easier to hold: a shorter
    measure, more air between ideas than inside them, headings that announce
@@ -1079,7 +1082,7 @@ div.art > * + * { margin-top: 1.15em; }
 
 /* ---- Reading progress ---------------------------------------------------
    Two thousand words with no end in sight is a different experience from two
-   thousand words that visibly end. One hairline, no numbers, no percentage —
+   thousand words that visibly end. One hairline, no numbers, no percentage -
    the information is "how much is left", and a bar answers that without
    asking to be read. */
 .readbar {

@@ -564,3 +564,97 @@ against White Tint body copy — a hairline of difference that reads as emphasis
 On light the same token is bronze, and two lines tall that stops being an
 initial and becomes a brown blob at the top of the article. Weight and scale
 already do everything an initial needs.
+
+## Twelfth pass — the social icons
+
+**They were six different sizes on the same grid.** Measured inside their
+24-unit boxes, with stroke, the silhouettes came out: YouTube 21.3 wide,
+Telegram 21.3, Instagram and LinkedIn 19.7 square, X 19.2 — and TikTok 13.2 by
+15.2, a third smaller than its neighbours. Worse, TikTok's centre sat at
+(14.15, 10.05) rather than (12, 12): two units up and two right, which is why it
+looked like it was escaping its circle rather than sitting in it.
+
+Every glyph now carries a transform that centres its measured bounding box on
+(12, 12) and scales it to a common cap — 19.6 units for the outline icons, 17.4
+for X. The two figures are not a mistake: a solid shape reads heavier than an
+outline of the same size, so filled marks are set a notch smaller, which is the
+standard compensation. The scale would otherwise change the stroke weight along
+with the geometry, so each group carries a counter-scaled `stroke-width` and
+every icon still draws at 1.7. Verified by re-measuring the shipped markup
+through its own transforms: all six centre on (12, 12) to within a fiftieth of a
+unit.
+
+With the glyphs finally filling their boxes, the old 1.05rem render size left
+the mark under 40% of a 2.25rem button. 1.2rem puts it at about 45%, which is
+where an icon button stops looking half-empty.
+
+**Telegram was two paths that missed each other.** The outline began at
+(21.3, 4.4) and the crease ran only as far as (18.4, 7.6) — they were meant to
+be the same corner, so the glyph forked at the top. Redrawn: the outline is one
+closed path through the origin, the left tip, the tail notch and the lower tip,
+and the crease terminates on the outline's own start vertex. They meet because
+they are the same point, not because two sets of numbers were eyeballed close.
+
+## Thirteenth pass
+
+**Telegram, measured properly this time.** The last pass centred every icon's
+bounding box, which is the wrong quantity for an asymmetric glyph. Rasterising
+each icon at 20px per unit and taking the alpha-weighted centroid gives where
+the ink actually sits, and Telegram's sat 1.27 units right and 0.36 up of its
+box centre: a long thin left wing carrying almost no weight against a body
+bunched on the right. TikTok's was 0.64 left and 1.07 down. Both are corrected
+at 70% of the measured gap; the last third would push a tip within a unit of
+the frame, and a glyph touching its own edge reads as clipped. Re-measured after
+the fix, every icon's ink now falls within 0.3 units of centre, against 1.27
+before.
+
+**Dark is the default outright.** Boot was resolving `prefers-color-scheme`,
+which is why the site opened dark on one machine and light on another: it was
+inheriting a decision the visitor made for some other app. The site has a look;
+you get it until you say otherwise, and saying otherwise is one button. The
+runtime OS listener is gone with it, and the `theme-color` metas no longer split
+on scheme either, so the browser chrome cannot go cream on a dark page.
+
+**Every em dash is gone.** 107 in visible copy, plus link-preview titles and
+meta descriptions, plus the strings inside inline scripts that end up on screen
+as verdicts and hints. Not deleted, rewritten: each dash was doing one of three
+jobs and each got the right punctuation instead. Appositives took commas or
+parentheses ("no one, including its authors, can say why"). Elaborations took
+colons ("Explanation, evidence and demarcation: the arguments underneath every
+methods section"). And the ones hiding a sentence boundary got the full stop
+they were standing in for ("You may run as many tests as you like. The
+interesting question is which ones you choose"). Page titles used the dash as a
+separator, so they take a middot now. Placeholder readouts waiting for a value
+take an en dash, which is that glyph's actual job. Code comments were cleared
+too. `README.md` is the exception: it is build documentation rather than site
+copy, and mechanically repunctuating a hundred sentences of it would do more
+harm than the dashes.
+
+**The sign-in page had a star field.** At that size on a plain panel the stars
+read as dead pixels rather than sky. Removed; the page keeps the well and the
+gradient.
+
+**Favicon replaced** with the supplied file, and verified rendering.
+
+## Fourteenth pass
+
+**The hero headline was sized against the wrong thing.** It used a viewport
+clamp topping out at 5.25rem, but it wraps inside a column, not a window. At
+1440px that put 84px type in a 558px track: about twelve and a half characters a
+line, so "underlying" took a line by itself and the block ran four or five lines
+deep with one or two words on each. The block was tall, the rag was ragged, and
+none of it had anything to do with how wide the screen actually was, which is
+why it looked worst on a big display.
+
+Two changes. The text column takes more of the grid, 1.15fr against 0.85fr
+instead of 1fr against 0.95fr. And the type is measured against that column
+rather than the window: `10.8cqw` holds the headline near seventeen characters a
+line at every width, which is about where a display line stops reading as a list
+of words. The viewport clamp survives as the fallback, retuned so browsers
+without container queries land in the same place. Measured across widths, the
+headline now sets in three lines from 880px up, and three on a phone, against
+four or five before.
+
+`text-wrap: balance` on the headline evens the rag instead of leaving a two-word
+orphan on the last line, and the lede goes from a 26ch ribbon to 34ch, which
+stopped it reading as a narrow column pinned under a wide one.
