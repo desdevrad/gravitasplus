@@ -580,7 +580,12 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
   line-height: .7;
   margin: .15em .1em 0 0;
   font-weight: var(--g-w-bold);
-  color: var(--g-accent);
+  /* Not the accent. On dark, Sisal against White Tint body copy is a hairline
+     of difference and reads as emphasis; on light the same token is bronze,
+     and two lines tall it stops being an initial and becomes a brown blob at
+     the top of the article. Weight and scale already do all the work an
+     initial needs. */
+  color: var(--g-text);
 }
 @supports (initial-letter: 2) or (-webkit-initial-letter: 2) {
   .art__lede::first-letter {

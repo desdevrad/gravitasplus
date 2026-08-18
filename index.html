@@ -91,8 +91,15 @@ document.documentElement.setAttribute('data-theme',
             Explore Topics</a>
           <a class="g-btn g-btn--secondary g-btn--lg" href="lab.html">Try Lab</a>
         </div>
-        <p class="lp-hero__credit">New topic monthly &middot; <span class="g-nums">312K</span> subscribers
-          &middot; <a href="community.html#join">4,100 members</a></p>
+        <!-- Each stat is its own element so the line breaks between facts and
+             never inside one. As loose text in a flex box, "312K" and
+             "subscribers" were separate anonymous items and could part company
+             at a wrap. -->
+        <p class="lp-hero__credit">
+          <span>New topic monthly</span>
+          <span><span class="g-nums">312K</span> subscribers</span>
+          <span><a href="community.html#join">4,100 members</a></span>
+        </p>
       </div>
       <div class="lp-orbit">
         <div class="lp-orbit__stage">

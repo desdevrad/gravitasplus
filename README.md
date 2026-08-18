@@ -535,3 +535,32 @@ handling by name, not by the site-wide clamp — that rule only caps duration an
 iteration count, which on a ticker would snap the track to its end position and
 park the visible copy off-screen. Under reduced motion the animation is off, the
 duplicates are gone, and what remains is a plain scrollable row.
+
+## Eleventh pass
+
+**The ticker is a signal, not a control.** It no longer pauses under the
+cursor, and nothing in the band can be selected. Both changes are the same
+decision: a strip of moving text that reacts to a pointer invites people to try
+to grab it, and on a phone a long press on a moving line puts selection handles
+over the one band on the page whose entire job is to be glanced at.
+
+**The separators were off centre.** As an `::after` inside each item, the dot
+had `.85rem` of margin on its left and `.85rem` plus the *next* item's padding
+on its right — sitting about a third of the way off centre, closer to the word
+it followed. A separator belongs between two things, so it is now drawn as a
+`::before` on each field with equal margins on both sides, and the item padding
+that was doing the other half of the spacing is gone. Copies stay identical
+widths, so the loop is still seamless.
+
+**The hero credit line ran off the side of a phone.** It was `inline-flex` with
+the default `nowrap`, left over from when it held a logo lockup — and three
+stats plus two separators do not fit one phone line. Worse, "312K" and
+"subscribers" were separate anonymous flex items, so even with wrapping they
+could have parted company. Each stat is now its own element that wraps as a
+unit, and the row breaks between facts rather than through them.
+
+**The drop cap is ink again.** It was set in the accent, which on dark is Sisal
+against White Tint body copy — a hairline of difference that reads as emphasis.
+On light the same token is bronze, and two lines tall that stops being an
+initial and becomes a brown blob at the top of the article. Weight and scale
+already do everything an initial needs.
