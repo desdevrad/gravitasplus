@@ -4,6 +4,60 @@
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- theme -----------------------------------------------------------
+     The attribute is already set by the inline snippet in <head>; setting it
+     there rather than here is the whole point, because a theme applied after
+     first paint means every light-mode visitor gets a flash of the dark site.
+     This module only owns the *toggle* and the broadcast.
+
+     Three states, not two: "system" is a real choice and the default, so
+     someone who has never touched the control follows their OS when it
+     changes at dusk. Pressing the button leaves system and pins a value. */
+  var THEME_KEY = 'gravitas:theme';
+  var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function stored() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+  function resolved() {
+    return document.documentElement.getAttribute('data-theme') || 'dark';
+  }
+  function apply(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    var btn = document.querySelector('.theme-toggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(theme === 'light'));
+      btn.setAttribute('title', theme === 'light' ? 'Switch to dark' : 'Switch to light');
+    }
+    // Canvases can't inherit a CSS colour, so the simulations listen for this
+    // and re-read their palette. Without it the hero keeps painting white
+    // lines on a cream page.
+    window.dispatchEvent(new CustomEvent('gravitas:theme', { detail: { theme: theme } }));
+  }
+
+  apply(resolved());
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.theme-toggle');
+    if (!btn) return;
+    var next = resolved() === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem(THEME_KEY, next); } catch (err) {}
+    apply(next);
+  });
+
+  // Follow the OS only while the visitor hasn't expressed a preference.
+  var onScheme = function () { if (!stored()) apply(mqDark.matches ? 'dark' : 'light'); };
+  if (mqDark.addEventListener) mqDark.addEventListener('change', onScheme);
+  else if (mqDark.addListener) mqDark.addListener(onScheme);
+
+  /* Read a themed colour channel for canvas work. Returns "r, g, b" so
+     callers can build rgba() at whatever alpha they need. */
+  window.gravitasInk = function (name, fallback) {
+    var v = getComputedStyle(document.documentElement)
+              .getPropertyValue('--g-canvas-' + name).trim();
+    return v ? v.replace(/\s+/g, ',') : (fallback || '241,239,236');
+  };
+
   /* ---- depth switch ----------------------------------------------------
      One control, two readings of the same page. The alternative — a separate
      "for researchers" section — splits the audience at the door and halves the
@@ -139,6 +193,44 @@
       });
     });
   });
+
+  /* ---- reading progress --------------------------------------------------
+     Only on pages that are actually long — an article body or a topic's
+     layers. Putting it on every page would make it chrome, and chrome that
+     says nothing is just another thing to ignore. It measures the article,
+     not the document, so the footer doesn't count as unread text. */
+  // div.art, not .art: the prose column, never the lab's card canvases.
+  var longform = document.querySelector('div.art') || document.querySelector('.layer');
+  if (longform) {
+    var bar = document.createElement('div');
+    bar.className = 'readbar';
+    bar.setAttribute('aria-hidden', 'true');   // the scrollbar already says this to AT
+    bar.innerHTML = '<i></i>';
+    document.body.appendChild(bar);
+    var fill = bar.firstChild;
+
+    // The tracked region runs from the top of the first long block to the
+    // bottom of the last, so 100% lands when the reading ends rather than when
+    // the page does.
+    var blocks = document.querySelectorAll('div.art, .layer');
+    var last = blocks[blocks.length - 1];
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      var startY = longform.getBoundingClientRect().top + window.scrollY;
+      var endY = last.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+      var span = endY - startY;
+      if (span <= 0) { fill.style.width = '0'; return; }
+      var p = (window.scrollY - startY) / span;
+      fill.style.width = Math.max(0, Math.min(1, p)) * 100 + '%';
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
 
   /* ---- newsletter / forms ---------------------------------------------- */
   [].forEach.call(document.querySelectorAll('[data-demo-form]'), function (f) {

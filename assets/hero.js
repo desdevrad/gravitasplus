@@ -13,6 +13,31 @@
   // straight back shut — so it only ever failed on the one page that loads
   // this file.
 
+  // ---- Theme palette -------------------------------------------------------
+  // A canvas can't inherit a CSS colour, so every simulation below used to have
+  // White Tint hard-coded — which is exactly why the hero survived the light
+  // theme as invisible white-on-cream. The channels live in gravitas.css; this
+  // reads them once, and again whenever the theme flips. Subsystems register a
+  // repaint hook rather than each listening for themselves, so a flip is one
+  // pass rather than five.
+  var INK = {};
+  var themeHooks = [];
+  function readInk() {
+    var cs = getComputedStyle(document.documentElement);
+    function ch(name, fallback) {
+      var v = cs.getPropertyValue('--g-canvas-' + name).trim();
+      return v ? v.replace(/\s+/g, ',') : fallback;
+    }
+    INK.line = ch('line', '241,239,236');
+    INK.core = ch('core', '255,255,255');
+    INK.body = [ch('body-a', '241,239,236'), ch('body-b', '212,201,190'), ch('body-c', '111,169,206')];
+  }
+  readInk();
+  window.addEventListener('gravitas:theme', function () {
+    readInk();
+    themeHooks.forEach(function (fn) { try { fn(); } catch (e) {} });
+  });
+
   // ---- Hero starfield: scatter many small white dots ----
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var starBox = document.getElementById('lp-stars');
@@ -31,7 +56,7 @@
       s.style.height = size.toFixed(2) + 'px';
       s.style.opacity = op.toFixed(2);
       // give the larger ones a faint glow so they read as stars, not specks
-      if (size > 2) s.style.boxShadow = '0 0 ' + (size * 1.5).toFixed(1) + 'px rgba(241,239,236,0.7)';
+      if (size > 2) s.style.boxShadow = '0 0 ' + (size * 1.5).toFixed(1) + 'px rgba(' + INK.line + ',0.7)';
       // let ~a third twinkle, unless reduced motion
       if (!reduce && Math.random() < 0.32) {
         s.classList.add('is-twinkle');
@@ -148,6 +173,10 @@
     });
 
     var gridDirty = true, lastOn = -1, lastAx = -1, lastAy = -1;
+    // A theme change alters the ink without altering the warp, so the
+    // frame-skip test below would happily keep the previous theme's frame
+    // on screen — the grid appeared to vanish until the pointer moved.
+    themeHooks.push(function () { gridDirty = true; });
     function drawGrid() {
       ambient.x = GW * 0.5; ambient.y = GH * 0.46;
       // ease the cursor influence in and out
@@ -168,7 +197,7 @@
 
       gctx.clearRect(0, 0, GW, GH);
       gctx.lineWidth = 1;
-      gctx.strokeStyle = 'rgba(241,239,236,0.14)';
+      gctx.strokeStyle = 'rgba(' + INK.line + ',0.14)';
 
       var pad = SPACING * 2;
       var step = Math.max(6, Math.floor(SPACING / 5)); // sampling along each line
@@ -230,16 +259,19 @@
     // One pre-rendered dot, scaled per particle. Building a radial gradient for
     // every particle on every frame was the comet's whole cost.
     var TSPR = 32;
-    var tailSprite = (function () {
+    var tailSprite;
+    function buildTail() {
       var c = document.createElement('canvas');
       c.width = c.height = TSPR;
       var g = c.getContext('2d');
       var gr = g.createRadialGradient(TSPR/2, TSPR/2, 0, TSPR/2, TSPR/2, TSPR/2);
-      gr.addColorStop(0, 'rgba(241,239,236,1)');
-      gr.addColorStop(1, 'rgba(241,239,236,0)');
+      gr.addColorStop(0, 'rgba(' + INK.line + ',1)');
+      gr.addColorStop(1, 'rgba(' + INK.line + ',0)');
       g.fillStyle = gr; g.fillRect(0, 0, TSPR, TSPR);
-      return c;
-    })();
+      tailSprite = c;
+    }
+    buildTail();
+    themeHooks.push(buildTail);
 
     hero.addEventListener('pointermove', function (e) {
       if (e.pointerType && e.pointerType !== 'mouse') return;
@@ -300,22 +332,22 @@
         hoverScale += ((overHit ? 1.9 : 1) - hoverScale) * 0.18;
         var gr = 16 * hoverScale;
         var glow = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, gr);
-        glow.addColorStop(0, 'rgba(241,239,236,0.85)');
-        glow.addColorStop(0.3, 'rgba(212,201,190,0.4)');
-        glow.addColorStop(1, 'rgba(212,201,190,0)');
+        glow.addColorStop(0, 'rgba(' + INK.line + ',0.85)');
+        glow.addColorStop(0.3, 'rgba(' + INK.body[1] + ',0.4)');
+        glow.addColorStop(1, 'rgba(' + INK.body[1] + ',0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.arc(head.x, head.y, gr, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fillStyle = 'rgba(' + INK.core + ',0.95)';
         ctx.beginPath();
         ctx.arc(head.x, head.y, 2.4 * hoverScale, 0, Math.PI * 2);
         ctx.fill();
 
         // a thin ring appears over hit targets — extra confirmation of "clickable"
         if (hoverScale > 1.08) {
-          ctx.strokeStyle = 'rgba(241,239,236,' + ((hoverScale - 1) * 0.5).toFixed(3) + ')';
+          ctx.strokeStyle = 'rgba(' + INK.line + ',' + ((hoverScale - 1) * 0.5).toFixed(3) + ')';
           ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.arc(head.x, head.y, 16 * hoverScale, 0, Math.PI * 2);
@@ -398,8 +430,8 @@
         var tailY = m.y - (m.vy / sp) * m.len;
 
         var g = mctx.createLinearGradient(m.x, m.y, tailX, tailY);
-        g.addColorStop(0, 'rgba(241,239,236,' + a.toFixed(3) + ')');
-        g.addColorStop(1, 'rgba(241,239,236,0)');
+        g.addColorStop(0, 'rgba(' + INK.line + ',' + a.toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(' + INK.line + ',0)');
         mctx.strokeStyle = g;
         mctx.lineWidth = 1.3;
         mctx.lineCap = 'round';
@@ -408,7 +440,7 @@
         mctx.lineTo(tailX, tailY);
         mctx.stroke();
 
-        mctx.fillStyle = 'rgba(255,255,255,' + (a * 0.85).toFixed(3) + ')';
+        mctx.fillStyle = 'rgba(' + INK.core + ',' + (a * 0.85).toFixed(3) + ')';
         mctx.beginPath();
         mctx.arc(m.x, m.y, 1.25, 0, Math.PI * 2);
         mctx.fill();
@@ -462,30 +494,47 @@
       var R_NEAR = 0.70, R_FAR = 1.40;         // hitbox: ramps in only within the
                                                // visible orbit area (half-span 1.25)
 
-      // Brand palette: the two bodies are White Tint and Sisal; the intruder is
-      // Cosmos Blue lifted until it can actually glow against the deep field.
-      var COLORS = [[241, 239, 236], [212, 201, 190], [111, 169, 206]];
-      var RGB = COLORS.map(function (c) { return c[0] + ',' + c[1] + ',' + c[2]; });
-      var TRAILCAP = 360;
-
+      // Brand palette, read from the theme rather than fixed. On dark the two
+      // bodies are White Tint and Sisal against deep space; on light they are
+      // ink and bronze on paper. The sprites are pre-rendered for speed, so a
+      // theme change has to rebuild them — hence the hook.
+      var RGB = [], TRAILCAP = 360;
       var SPRITE = 64;
       var SPRITE_R = [19, 16, 15];
-      var glowSprites = COLORS.map(function (col, i) {
-        var c = document.createElement('canvas');
-        c.width = c.height = SPRITE;
-        var g = c.getContext('2d');
-        var rgb = col[0] + ',' + col[1] + ',' + col[2];
-        var grad = g.createRadialGradient(SPRITE / 2, SPRITE / 2, 0, SPRITE / 2, SPRITE / 2, SPRITE / 2);
-        grad.addColorStop(0,    'rgba(' + rgb + ',0.85)');
-        grad.addColorStop(0.35, 'rgba(' + rgb + ',0.22)');
-        grad.addColorStop(1,    'rgba(' + rgb + ',0)');
-        g.fillStyle = grad;
-        g.fillRect(0, 0, SPRITE, SPRITE);
-        g.fillStyle = 'rgba(255,255,255,' + (i === 2 ? 0.85 : 0.95) + ')';
-        g.beginPath();
-        g.arc(SPRITE / 2, SPRITE / 2, (i === 2 ? 2.1 : 2.6) * SPRITE / 34, 0, 6.28318);
-        g.fill();
-        return c;
+      var glowSprites = [];
+
+      function buildBodies() {
+        RGB = INK.body.slice();
+        glowSprites = RGB.map(function (rgb, i) {
+          var c = document.createElement('canvas');
+          c.width = c.height = SPRITE;
+          var g = c.getContext('2d');
+          var grad = g.createRadialGradient(SPRITE / 2, SPRITE / 2, 0, SPRITE / 2, SPRITE / 2, SPRITE / 2);
+          grad.addColorStop(0,    'rgba(' + rgb + ',0.85)');
+          grad.addColorStop(0.35, 'rgba(' + rgb + ',0.22)');
+          grad.addColorStop(1,    'rgba(' + rgb + ',0)');
+          g.fillStyle = grad;
+          g.fillRect(0, 0, SPRITE, SPRITE);
+          g.fillStyle = 'rgba(' + INK.core + ',' + (i === 2 ? 0.85 : 0.95) + ')';
+          g.beginPath();
+          g.arc(SPRITE / 2, SPRITE / 2, (i === 2 ? 2.1 : 2.6) * SPRITE / 34, 0, 6.28318);
+          g.fill();
+          return c;
+        });
+      }
+      var blendMode = 'lighter';
+      function readBlend() {
+        blendMode = document.documentElement.getAttribute('data-theme') === 'light'
+          ? 'source-over' : 'lighter';
+      }
+      readBlend();
+      buildBodies();
+      themeHooks.push(function () {
+        readBlend();
+        buildBodies();
+        // The reduced-motion path draws once and stops, so without an explicit
+        // repaint it would keep showing the previous theme's figure forever.
+        if (reduceOrbit && tcount[0] > 2) render();
       });
 
       // --- state ---
@@ -645,7 +694,11 @@
 
       function render() {
         octx.clearRect(0, 0, W, H);
-        octx.globalCompositeOperation = 'lighter';
+        // 'lighter' adds toward white: on deep space that is how two overlapping
+        // glows read as brighter. On a cream page it fades them out instead, so
+        // the light theme composites normally. Cached — this runs 60 times a
+        // second and the answer only changes when the toggle is pressed.
+        octx.globalCompositeOperation = blendMode;
         // The cursor is already drawn — it's the comet, on its own canvas above
         // this one. Drawing a second body here just doubled it and smeared a
         // hero-wide trail across the frame. The pointer's *gravity* still acts;

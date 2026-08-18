@@ -17,7 +17,7 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
 
 /* scattered stars, generated in JS — sits above the grid, below content */
 .lp-stars { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-.lp-star { position: absolute; border-radius: 50%; background: #f1efec; }
+.lp-star { position: absolute; border-radius: 50%; background: rgb(var(--g-canvas-line)); }
 .lp-star.is-twinkle { animation: lp-twinkle var(--dur, 4s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
 @keyframes lp-twinkle { 0%, 100% { opacity: var(--o, .6); } 50% { opacity: .12; } }
 
@@ -28,8 +28,11 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
    (z-index 4 vs the content's 3) so the cursor draws on top of the buttons
    instead of sliding underneath them. pointer-events:none keeps clicks working. */
 .lp-comet { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-/* hide the native cursor only where the comet is active (desktop pointers) */
-@media (hover: hover) and (pointer: fine) {
+/* Hide the native cursor only where the comet is actually drawn. Both extra
+   conditions are load-bearing: reduced motion hides the comet canvas, and
+   without the guard those visitors got `cursor: none` over an empty hero and
+   lost their pointer. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .lp-hero.comet-on, .lp-hero.comet-on a, .lp-hero.comet-on button { cursor: none; }
 }
 /* keep hero text/CTAs above the grid + star + comet layers */
@@ -120,7 +123,13 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
   .lp-hero__grid { grid-template-columns: 1fr; text-align: center; }
   .lp-hero { min-height: 0; padding-block: var(--g-space-3xl); }
   .lp-hero__inner .g-cluster { justify-content: center; }
-  .lp-orbit { order: -1; width: min(88%, 24rem); margin-right: auto; }
+  /* The orbit used to be pulled above the copy on a phone (order: -1), where a
+     square canvas plus its caption ate most of the first screen and the
+     headline started below the fold. It reads better as the reward *after*
+     the pitch: title, lede, buttons, then the thing you can play with — which
+     also puts it under the thumb rather than under the status bar. */
+  .lp-orbit { order: 0; width: min(78%, 20rem); margin-inline: auto;
+              margin-top: var(--g-space-xl); }
   .lp-hero__credit { margin-inline: auto; }
 }
 
@@ -131,10 +140,10 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
    makes the state change unmistakable and lets the comet stay visible on top. */
 .g-btn--primary:hover,
 .g-btn--primary:focus-visible {
-  --_bg: var(--g-cosmos-600);
-  --_fg: var(--g-white-tint);
-  --_bd: var(--g-white-tint);
-  box-shadow: var(--g-glow-md), 0 0 0 4px rgb(241 239 236 / 0.14);
+  --_bg: var(--g-solid-bg-hover);
+  --_fg: var(--g-solid-fg-hover);
+  --_bd: var(--g-solid-bg);
+  box-shadow: var(--g-glow-md), 0 0 0 4px rgb(var(--g-tint) / 0.20);
 }
 .g-btn--primary .g-btn__icon { transition: transform var(--g-dur) var(--g-ease-orbit); }
 .g-btn--primary:hover .g-btn__icon { transform: translateX(2px); }
@@ -233,3 +242,113 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
 /* small reveal on scroll (respects reduced-motion via the system reset) */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity var(--g-dur-slow) var(--g-ease-orbit), transform var(--g-dur-slow) var(--g-ease-orbit); }
 .reveal.is-in { opacity: 1; transform: none; }
+
+/* ---- Hero lede, split into two weights -----------------------------------
+   The copy is three sentences of real information. Set at one size it read as
+   a paragraph to be got through; the eye skipped it and went to the buttons.
+   Splitting it costs nothing in words and buys a clear entry point: the
+   promise at lead size, the detail a step quieter for whoever wants it. */
+.lp-hero__lede { margin-bottom: var(--g-space-xs); color: var(--g-text); max-width: 26ch; }
+.lp-hero__sub {
+  font-size: var(--g-fs-small); line-height: 1.6;
+  color: var(--g-text-muted); max-width: 46ch; margin: 0;
+}
+@media (max-width: 860px) {
+  .lp-hero__lede, .lp-hero__sub { margin-inline: auto; }
+}
+.lp-hero__credit a { color: inherit; text-decoration-color: var(--g-border-strong); }
+.lp-hero__credit a:hover { color: var(--g-text); }
+
+/* ---- Fields band ---------------------------------------------------------
+   One line, directly under the hero, answering the question a non-physicist
+   asks first. Set as data rather than prose — a list of nouns is read in a
+   glance, a sentence claiming breadth is read as marketing.
+
+   As a static wrapped list it was ten quiet words that the eye filed as a
+   footer and skipped. Moving turns it into the one thing on the page that
+   asks to be looked at, which is exactly the job: it is the answer to
+   "is this for me?", and it has to be noticed to work. Same type size, same
+   band height — the change is in the layout, not the volume. */
+.fields {
+  border-bottom: 1px solid var(--g-hairline);
+  background: var(--g-bg-deep);
+  padding-block: var(--g-space-sm);
+  overflow: hidden;
+}
+.fields__in { display: flex; align-items: center; gap: var(--g-space-md); }
+
+/* The label is the fixed point the ticker runs past, so it gets a rule to
+   sit against rather than floating in front of moving text. */
+.fields__lab {
+  margin: 0; flex: none;
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding-right: var(--g-space-md);
+  border-right: 1px solid var(--g-hairline);
+  font-family: var(--g-font-mono); font-size: var(--g-fs-eyebrow);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--g-text-subtle);
+  line-height: 1.4;
+}
+.fields__lab::before {
+  content: ""; width: .4rem; height: .4rem; border-radius: 50%;
+  background: var(--g-accent); flex: none;
+}
+
+/* The rail. The mask is what makes it read as a continuous strip rather than
+   words being clipped by a box edge — they arrive and leave, rather than
+   appearing and vanishing. */
+.fields__ticker {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3rem,
+                        #000 calc(100% - 3rem), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3rem,
+                #000 calc(100% - 3rem), transparent 100%);
+}
+.fields__list {
+  display: flex; flex: none; list-style: none; margin: 0; padding: 0;
+  animation: fields-roll 42s linear infinite;
+}
+/* Slow enough to read a word without tracking it, and it stops if you want to
+   read the whole set. */
+.fields__ticker:hover .fields__list,
+.fields__ticker:focus-within .fields__list { animation-play-state: paused; }
+
+.fields__list li {
+  display: inline-flex; align-items: center; white-space: nowrap;
+  padding-inline: .85rem;
+  font-size: var(--g-fs-small); color: var(--g-text-muted);
+}
+.fields__list li::after {
+  content: ""; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--g-border-strong); margin-left: .85rem; flex: none;
+}
+@keyframes fields-roll { from { transform: none; } to { transform: translateX(-100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The site-wide reduced-motion rule only clamps duration and iteration count,
+     which on a ticker is worse than useless: it would jump the track to its end
+     position and park the first copy off-screen. Kill the animation by name and
+     drop the duplicates, leaving a plain scrollable row. */
+  .fields__list { animation: none; }
+  .fields__list[aria-hidden] { display: none; }
+  .fields__ticker { overflow-x: auto; scrollbar-width: none; }
+  .fields__ticker::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 620px) {
+  /* Side by side, the label leaves the rail about a word and a half wide. */
+  .fields__in { flex-direction: column; align-items: stretch; gap: .3rem; }
+  .fields__lab { border-right: 0; padding-right: 0; }
+}
+
+/* ---- Reading time --------------------------------------------------------
+   A label and a value, not a sentence. The mono label sets it apart from the
+   prose above it so the eye can find the commitment without reading for it —
+   which is the only reason anyone looks for a reading time. */
+.lp-rt { margin: var(--g-space-md) 0 0; }
+.lp-rt dt {
+  font-family: var(--g-font-mono); font-size: var(--g-fs-caption);
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--g-text-subtle); margin-bottom: .15rem;
+}
+.lp-rt dd { margin: 0; font-size: var(--g-fs-small); color: var(--g-text-muted); }

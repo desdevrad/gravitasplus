@@ -18,7 +18,7 @@ path-ai-in-research.html          One path, expanded
 community.html                    Roles, weekly experiment, events
 newsletter.html                   Subscribe + archive
 about.html                        What this is, and the editorial rules
-assets/                           gravitas.css · site.css · hero.css · site.js · hero.js
+assets/                           gravitas.css · site.css · hero.css · chat.css · site.js · hero.js · chat.js
 ```
 
 ---
@@ -306,3 +306,232 @@ strong-influence radius with margin. Inside it a drag perturbs the orbit; a few
 dozen pixels outside it the page scrolls normally. Locking the whole hero would
 have been simpler and would also have trapped the reader on a screen the orbit
 nearly fills — the escape route is the point.
+
+## Seventh pass
+
+**A light theme, and the reason there wasn't one.** The stylesheet said dark was
+"the default and only mode", and it meant it — the dark values were written as
+literals in about ninety places. Adding a mode therefore started with finding
+them all once and routing them through named channels: `--g-tint` for the
+translucent overlays, `--g-accent` for Sisal, `--g-chrome` for the sticky bars,
+`--g-solid-bg/fg` for pressed chips and primary buttons, `--g-canvas-*` for the
+things a canvas paints. After that `:root[data-theme="light"]` is a single block.
+
+The light theme is not the dark one with the lights on. The brand is a night
+sky, so the star field, the meteors and the comet cursor switch **off** rather
+than render as grey dust on cream, and the orbit stops compositing with
+`lighter` (which adds toward white — correct on deep space, a wash-out on
+paper). The well is one SVG with White Tint strokes; inverting the render is
+cheaper and more reliable than shipping a second file, and alpha survives it.
+Sisal itself is unreadable on white, so the light theme substitutes the same
+warmth at ink weight (`#7b6242`) instead of dropping the accent or borrowing a
+fifth hue. Every text pair measures 4.5:1 or better, which is where dark was.
+
+The toggle is a sun/moon button in the header. Three states, not two: **system**
+is the default and a real choice, so a visitor who never touches the control
+follows their OS when it changes at dusk. Pressing the button leaves system and
+pins a value. The attribute is set by an inline snippet in `<head>`, before any
+stylesheet — a theme applied after first paint means every light-mode visitor
+sees a flash of the dark site, which is the one bug a theme toggle cannot ship
+with.
+
+Canvases can't inherit a CSS colour, so the hero grid, the orbit, the Lorenz
+figure and the lab's generated card art read their palette from the tokens at
+paint time and repaint on a `gravitas:theme` event. The inline logos were
+`fill="#f1efec"` — a white logo on a cream page — and are now `currentColor`.
+
+**Ask Gravitas.** A floating assistant on every page. It does not open itself
+and it does not nag; a bubble that pops up unasked on a reading site interrupts
+the one thing the site is for. There is no backend here, and a widget that
+*sounds* like an assistant will confidently invent facts about a site it cannot
+see — so this ships as a router, not an oracle: it matches a question against a
+hand-written index of what actually exists, answers with real destinations, and
+says so at the foot of the panel. When it can't match, it says that instead of
+guessing. Set `window.GRAVITAS_CHAT = { endpoint }` before the script and it
+defers to a real API, with the local index as the fallback for when that call
+fails — which is the behaviour you want at 3am anyway.
+
+**The community stops being card 05 of six.** The header CTA was a mailing-list
+signup; it is now **Join Us**, pointing at a `#join` target that previously did
+not exist. On the home page the community moved to slot 02 with an accent rail,
+and the last band on the page — which was a newsletter form — is now the door
+into the community, with the newsletter as the quieter second button. The
+footer's "Do" column became "Take Part" with Join Us at the head of it.
+
+**Less landing page, not less writing.** Card descriptions cut to a single
+clause, the `<dl>` of "what's in a topic" replaced by a six-noun strip, the
+latest-work list reduced to headline and metadata. The hero lede was left
+word-for-word and *split* instead: the promise at lead size, the detail a step
+quieter. It was three sentences of real information set as one block, and the
+eye was bouncing off it to the buttons — which is a hierarchy problem wearing a
+length problem's clothes.
+
+Topics and Magazine pieces stay dense, because that density is the product.
+What changed there is the page holding them: measure down from 68ch to 62ch
+(a 68ch line at lead size runs to ~100 characters, past where the eye loses the
+return sweep), paragraph spacing raised above line spacing, `h2`s marked by a
+short accent rule rather than more size, and a reading-progress hairline —
+two thousand words with no visible end is a different experience from two
+thousand words that end.
+
+**Two casing registers.** `h2` section heads stay sentence case; `h3`/`h4`
+sub-section headings take Title Case. Editorial headlines and the
+question-titles of Topics and articles are deliberately excluded — "Can A Model
+Produce A Hypothesis, Or Only A Sentence That Looks Like One?" reads as a shout,
+not a heading. Two registers applied consistently *is* the hierarchy;
+title-casing everything would flatten it again.
+
+**It is not a physics site.** Nothing ever said it was, but every worked example
+came from one, and a visitor from immunology or labour economics reads that in
+about four seconds. So: a fields band under the hero (ten disciplines, one line
+— a list of nouns is read at a glance, a sentence claiming breadth is read as
+marketing); two planned Topics from outside the physical sciences, on
+replication and on whole-cell modelling, because the claim is cheap and the
+Topic list is where a visitor checks it; "Computational Physics" became
+"Computational Science"; and the About page now says plainly that a
+haematologist, a climate modeller and a labour economist are downstream of the
+same arguments.
+
+**Also:** the lab's card canvases were `class="art"` — the same selector the
+Magazine article body uses for its prose column. Two unrelated components
+sharing a class is a bug waiting for someone to write a rule for one of them,
+and the new reading measure was exactly that rule. The canvases are `.cardart`
+now, and the long-form rules are scoped to `div.art` besides.
+
+## Eighth pass — corrections
+
+**Favicon.** `assets/favicon.svg` had been sitting unused since the first build.
+Wired up on all fourteen pages, with `monogram.svg` as the Safari mask icon and
+a pair of `theme-color` metas so the browser chrome follows the theme.
+
+**Reading time, back on the home page.** The parts strip replaced a `<dl>` that
+said what six nouns say — but the thing a reader actually wants before opening a
+28-minute film and an 18-minute essay is the number, and the six nouns were not
+it. The `<dl>` is back, restyled: a mono label above the value so the commitment
+can be found without reading for it.
+
+**Ask Gravitas+ wears the brand.** The launcher had a generic sparkle and said
+"Ask", which reads as a bolted-on vendor widget. It now carries the channel's
+own G and its full name, in the panel header too.
+
+**Casing, corrected.** The last pass title-cased the wrong level: `h3`/`h4` card
+and callout labels, when what was meant was the section heads — *The current
+topic*, *Six ways in*, and their equivalents on every other page. Those are now
+Title Case, along with the short page titles (*Interactive Lab*, *Learning
+Paths*, *The Newsletter*). Still excluded, deliberately: essay headings inside
+`.art`, the display lines on the join and account panels, and Topic and article
+titles, which are sentences rather than labels.
+
+**The simulation moved down the phone.** It was pulled above the copy with
+`order: -1`, where a square canvas and its caption ate most of the first screen
+and the headline started below the fold. It now follows the pitch — title,
+lede, buttons, then the thing you can play with — which also puts the drag
+target under the thumb instead of under the status bar, and it is a little
+smaller besides.
+
+**Two bugs from the light theme.**
+
+The comet *is* the cursor: the hero sets `cursor: none` and lets the canvas draw
+the pointer instead. Hiding the comet in light mode therefore did not remove a
+decoration, it removed the mouse pointer. It composites source-over and takes
+all its colour from the tokens, so it needed no hiding at all — on paper it is
+simply a dark comet. The same trap was waiting for anyone with reduced motion,
+which also hides the comet canvas, so the `cursor: none` rule now requires
+`prefers-reduced-motion: no-preference` as well.
+
+The grid caches its last frame and skips the redraw when the warp has not
+changed — that is what makes an idle grid free. A theme flip changes the ink
+without changing the warp, so the canvas kept displaying white lines on a cream
+page, which is nothing at all, until a mouse move happened to invalidate the
+cache. The theme hook now marks it dirty.
+
+**The reading-depth switch was unreachable on a phone.** `.depth` was hidden
+below 900px from when it lived in the header, where there is genuinely no room
+for it. It does not live there any more — it sits in the `.depthbar` above the
+text it governs — so the rule left the bar announcing "this essay reads two
+ways" with no way to pick either. Now hidden only in the header, and stacked
+full-width under its own sentence on narrow screens.
+
+**Footer restored** to Read / Do, and Join Us removed from it. It is still the
+header CTA, which is the loud slot; repeating it in the footer was a second ask
+in a place people go to find a link, not to be sold one.
+
+**Moon icon, optically centred.** Its bounding box was centred to within a
+quarter of a unit, but its *mass* was not: the area centroid measures
+(9.97, 14.03) against a 12,12 viewBox centre, which is exactly why it read as
+sitting low and left inside a circular button. Correcting the full 2.03 units
+would push the upper tip out of the box, so the glyph is shifted part of the way
+back — splitting the difference between the two centres, which is what optical
+centring is. The sun was already symmetric on both axes; checked, not touched.
+
+**The community card is a card again.** Its accent rail made one of six equal
+doors look like a different kind of object. Removed rather than extended to all
+six, since a rail on every card is just a border.
+
+## Ninth pass — the assistant panel
+
+**One close, not two.** The launcher morphed into an X while the panel's own
+header showed a second X six inches above it. Two controls that do the same
+thing make a reader stop and pick, and neither is obviously the right one. The
+launcher now has a single job — open — and steps aside while the panel is up.
+It stays in the layout while hidden, because the panel is anchored to it.
+
+**Closing has an animation now.** It never did: the panel was toggled with
+`display`, which is not an animatable property, so it vanished on the frame the
+class came off while opening had a keyframe. The panel is absolutely positioned
+above the launcher and toggled with opacity, transform and a *delayed*
+visibility, which does transition if you name it. Its transform origin is the
+launcher's corner, so it grows out of the button it came from and collapses back
+into it. The launcher's fade-out needed the same treatment — a `transition-delay`
+on a property that isn't in the transition list is ignored, which would have
+snapped the button out of existence mid-fade.
+
+**The header was doing three jobs and none of them well.** It held the mark
+inside a bordered circle, which is avatar styling — this is a logo, and a logo
+does not need a container to read as one. Beside it sat the name and, under
+that, a mono uppercase strapline saying "FIND YOUR WAY AROUND", which is the
+same claim as the note at the foot of the panel, one line below the name, in the
+loudest typographic treatment in the widget. So the busiest element in a thing
+whose whole job is to stay out of the way was a sentence the reader was about to
+be told twice.
+
+What is left is a lockup and a close: the bare mark, "Ask Gravitas+" with the
+plus in the accent the brand gives it everywhere else, and a close button that
+only draws its circle on hover. The honesty line stays where it was, once, under
+the input — available without being read on the way in. The kept parts are kept:
+suggested openers, destination chips instead of blue links, the typing beat, and
+the widget not opening itself.
+
+**Also fixed on the way past:** the mark now carries one class in both homes, so
+the colour it used to set on itself no longer overrides the launcher's own
+foreground (dark ink on a dark fill); `.gchat` is a block again, so the
+inline-flex button stopped inheriting the body's leading as phantom space under
+a viewport-anchored control; and the panel height has a `vh` fallback under its
+`dvh`.
+
+## Tenth pass
+
+**The assistant panel sat a launcher's height too high.** It was anchored above
+the button with `bottom: calc(100% + 0.6rem)` — which made sense while the
+launcher stayed on screen and turned into an X. It doesn't any more: it hides
+while the panel is open, so those 3.85rem under the panel were a band of
+nothing. The panel is anchored to the bottom of the widget now and takes the
+space, which also gives it 3.5rem more height on a short screen.
+
+**The fields band is a ticker.** Ten quiet words in a wrapped row read as a
+footer and got skipped — which is a poor fate for the one line on the page that
+answers "is this for me?". It now runs: a fixed mono label with an accent dot,
+a hairline, and the fields sliding past it on a masked rail so words arrive and
+leave rather than being clipped by a box edge. It pauses on hover and on focus,
+because a ticker you cannot stop is a ticker you cannot read. Same type size and
+the same band height — the change is layout, not volume.
+
+Two things it needs to be honest and correct. The track is tripled: each copy
+slides left by exactly its own width, so at the end of a cycle copy 2 stands
+where copy 1 began and the restart is invisible; two copies suffice at most
+widths but can come up short on a wide viewport, and the third closes that gap.
+Only the first copy is exposed to assistive technology. And reduced motion needs
+handling by name, not by the site-wide clamp — that rule only caps duration and
+iteration count, which on a ticker would snap the track to its end position and
+park the visible copy off-screen. Under reduced motion the animation is off, the
+duplicates are gone, and what remains is a plain scrollable row.
