@@ -700,3 +700,53 @@ whole 8px and 11px at 100% rather than 8.4px and 11.6px.
 Verified by rasterising each icon at seven zoom levels from 100% to 250% and
 measuring the ink centre against the button centre. Worst case across the whole
 set is now 0.12 device pixels, against 1.49 for the moon before.
+
+## Sixteenth pass — thumbnails
+
+**The poster frames were empty gradients, and the fix had to survive the
+folder and the code drifting apart.** The obvious version — a path written
+into each card, or a manifest listing every film — fails the same way: two
+places now hold the same fact, and the day one is edited and the other is not,
+a card points at a file that is not there. A browser cannot read a directory
+listing, so "read the folder" has to be built out of something it can do.
+
+It can load an image and find out whether that worked. So the name is not
+stored anywhere; it is derived from the link the card already carries. The
+card on the homepage points at `topic-computable-universe.html`, therefore it
+asks for `assets/thumbnails/topic-computable-universe.webp`. The card on the
+topic page itself has no `href` — it is already on the page it means — so it
+reads its own filename and arrives at the same name. One rule, no list:
+
+    a page called <name>.html takes its still from
+    assets/thumbnails/<name>.{webp,jpg,png}
+
+Extensions are tried in order and the first that decodes wins, sequentially
+rather than in parallel, because three requests to locate one file wastes two
+every time and misses are the common case while the archive fills up. A miss
+is not an error state: the card keeps the gradient it always had, which is why
+`topic-machine-hypothesis` needs no special casing to go without artwork.
+`data-thumb="some-name"` overrides the derivation for a card whose still is
+not named after its destination.
+
+One thing the artwork broke that the empty frame had not. The light theme
+inverts the play button, on the stated assumption that a light site implies a
+light thumbnail. It does not. A thumbnail is a fixed image and ours are deep
+space by brand definition; it does not lighten because the reader hit the
+toggle. Over a thumbnail the ring now follows the picture instead of the page.
+The empty frame, which is drawn from theme tokens and genuinely does go light,
+is unchanged.
+
+The `.video__meta` strip — duration and strand, set in mono across the foot of
+every frame — is gone from all three cards, and its rules with it. It was
+carrying information the page already gives in the copy beside it, and over a
+thumbnail it covered the bottom third of the artwork to repeat itself. The
+play ring stays centred and full size, as it was before this pass; on a still
+typeset left it clips the headline, which is the trade for the frame reading
+as one picture rather than a picture with a bar on it.
+
+The scrim that remains is a flat 14% black, even across the frame. It is not
+holding up the contrast on its own — the ring has its own dark disc and blur —
+it only stops a pale thumbnail from swallowing the border.
+
+Verified at 400, 480, 560, 760 and 1440px in both themes, on a page with
+artwork and a page without.

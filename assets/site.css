@@ -282,10 +282,31 @@ body.is-deep     [data-level="overview"] { display: none; }
   transition: transform var(--g-dur) var(--g-ease-orbit), background-color var(--g-dur) var(--g-ease-orbit);
 }
 .video:hover .video__play { transform: scale(1.08); background: rgb(0 48 73 / .6); }
-.video__meta {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: var(--g-space-md);
-  background: linear-gradient(180deg, transparent, rgb(3 3 3 / .8));
-  font-family: var(--g-font-mono); font-size: var(--g-fs-caption); color: var(--g-text-muted);
+/* The poster frame, when assets/thumbnails/ holds one for the page this card
+   points at. See the thumbnail module in site.js for how it is found. The
+   image is absolute rather than a grid item so it fills the frame without
+   displacing the play button, which stays centred by the grid. */
+.video__img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--g-dur-slow) var(--g-ease-orbit),
+              transform var(--g-dur-slow) var(--g-ease-orbit);
+}
+.video.has-thumb .video__img { opacity: 1; }
+/* Light and even. The ring carries its own dark disc and blur, so this is not
+   holding up the contrast on its own — it only keeps a pale patch of a
+   thumbnail from swallowing the border, and stays faint enough that the
+   artwork is still the thing you see. */
+.video.has-thumb::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: rgb(3 3 3 / .14);
+}
+.video__play { position: relative; z-index: 1; }
+.video:hover .video__img { transform: scale(1.03); }
+.video.is-flat:hover .video__img { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .video__img { transition: opacity var(--g-dur-fast) linear; }
+  .video:hover .video__img { transform: none; }
 }
 
 /* sources at three levels */
@@ -965,9 +986,17 @@ body.is-deep .entry__lvl { color: var(--g-accent); border-color: var(--g-border)
 :root[data-theme="light"] .video:hover .video__play {
   background: var(--g-cosmos-600); color: var(--g-white-tint);
 }
-:root[data-theme="light"] .video__meta {
-  background: linear-gradient(180deg, transparent, rgb(255 255 255 / 0.92));
-  color: var(--g-text-muted);
+/* Except over a thumbnail. The inversion above is right for the empty frame,
+   which is drawn from theme tokens and really does go light — but a thumbnail
+   is a fixed picture and ours are deep space by definition. It does not
+   lighten because the reader flipped the toggle, so the ring laid over it
+   follows the image rather than the page. */
+:root[data-theme="light"] .video.has-thumb .video__play {
+  border-color: rgb(241 239 236 / .7); background: rgb(3 3 3 / .35);
+  color: var(--g-white-tint);
+}
+:root[data-theme="light"] .video.has-thumb:hover .video__play {
+  background: rgb(0 48 73 / .6); color: var(--g-white-tint);
 }
 :root[data-theme="light"] .g-video-card__duration {
   background: rgb(0 34 54 / 0.8);
