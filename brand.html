@@ -606,6 +606,9 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     thing that is protected. It is never compressed, never scaled below its minimum, and never
     allowed to shrink so that something beside it can stay. The row sheds its own contents
     instead, in a stated order.</p>
+  <p>Everything left in the row is one height, taken from <code>--gh-control</code>: 2.5rem on a
+    desktop, 2.75rem below 880px where it also has to clear a 44px touch target. That holds for the
+    pills as well as the circles.</p>
   <p>In the site header that order is: below 880px the navigation collapses into the menu and
     <b>Sign in</b> goes with it; below 400px <b>Join Us</b> follows, leaving the mark, the theme
     control and the menu. Both keep working from inside the menu, so nothing is merely hidden.
@@ -1101,6 +1104,10 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     <li>A leading icon pushes the label right of centre. Correct it with <code>.g-btn--lead</code>,
       which shifts by about 45% of the icon and gap width: correcting it fully centres the label but
       leaves the ink block visibly left, which reads worse than the original problem.</li>
+    <li>In the header actions row a button does not size itself. Pill and circle alike take their
+      height from <code>--gh-control</code> and centre the label in it, so Sign in, Join Us and the
+      theme control are one height and cannot drift when the type scale or the button padding
+      changes. A button's own padding sets its width, never the row's height.</li>
   </ul>
 
   <h3>Tags and Badges</h3>
@@ -1395,7 +1402,8 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     <li>No horizontal overflow at 360, 390, 768, 1024, 1440 and 1920px.</li>
     <li>The logotype is at its full width at every one of them. If it is not, the header is
       carrying a control it should have handed to the menu.</li>
-    <li>Every control in the header actions row is the same size as its neighbours.</li>
+    <li>Every control in the header actions row is the same height as its neighbours, pills
+      included, in both themes.</li>
     <li>No chip, badge or pill overprints text at any width.</li>
     <li>The mobile menu opens, closes on selection, and navigates, on every page.</li>
     <li>No console errors, no broken internal links, and no clickable dead links.</li>
@@ -1585,7 +1593,8 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
       <div class="bk-log__when">2.2 &middot; Aug 2026</div>
       <div class="bk-log__what">Layer 01 of a Topic is a Video, not a Film, across the interface,
         the copy and this document. Adds the rule that the mark never gives way, with the header's
-        shedding order, and the geometry rules for tags, badges and card chips.</div>
+        shedding order and its single row height, and the geometry rules for tags, badges and card
+        chips.</div>
     </div>
     <div class="bk-log__row">
       <div class="bk-log__when">2.1 &middot; Aug 2026</div>

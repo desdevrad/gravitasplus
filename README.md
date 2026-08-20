@@ -761,10 +761,18 @@ the copy, the class-adjacent strings and the brand book, whose lexicon row now
 reads Use *Video*, never *Film* or *episode*. Anchors moved with it, so a link
 to `#film` on a topic page is now `#video`.
 
-**The header.** The three circular controls had drifted: the CTA and the
-hamburger at 2.75rem, the theme toggle at 2.5rem, with icons at 16.8, 18 and
-20px. They now come from one token pair, `--gh-control` and
-`--gh-control-icon`, so the row cannot fall out of step again.
+**The header.** Every control in the actions row had been sized on its own and
+they had drifted apart: the CTA and the hamburger at 2.75rem, the theme toggle
+at 2.5rem, icons at 16.8, 18 and 20px, and Sign in and Join Us at whatever
+`.g-btn--sm`'s padding added up to, which is 35px. On a phone that put a small
+circle between two larger ones; on a desktop it put two short pills beside a
+taller circle.
+
+They now come from one token pair, `--gh-control` and `--gh-control-icon`. The
+token is the row's *height*, not the circles' diameter: the pills take it as a
+`min-height` and centre their label in it, so the row cannot fall out of step
+again when the type scale or the button padding moves. Measured: 40px across
+on a desktop, 44px across below 880px.
 
 The reason the row was crowded at all is worth stating. The logotype was the
 only flex item permitted to shrink, so whenever the header ran out of space it

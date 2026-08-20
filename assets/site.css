@@ -18,14 +18,23 @@
    every page. Left in the hero stylesheet, the dropdown simply did not exist
    anywhere except the home page. */
 /* ---- Header additions ---- */
-/* One size for every circular control in the header actions row. The three
-   were set independently and drifted: the CTA and the burger at 2.75rem, the
-   theme toggle at 2.5rem, which on a phone put a visibly smaller circle
-   between two larger ones. A token means the row can only ever be uniform,
-   and the icons inside it follow the same rule. 2.75rem is the larger of the
-   two sizes already in use and clears the 44px touch target. */
+/* One height for every control in the header actions row, pill or circle. All
+   of them had been sized independently and drifted apart: the CTA and the
+   burger at 2.75rem, the theme toggle at 2.5rem, and Sign in and Join Us at
+   whatever `.g-btn--sm`'s padding happened to add up to, which is 35px. On a
+   phone that put a small circle between two larger ones; on a desktop it put
+   two short pills beside a taller circle.
+
+   The token is the row's height, not just the circles' diameter: the buttons
+   take it as a min-height and centre their label in it, so a change to the
+   type scale or the button padding cannot pull the row out of line again.
+   2.75rem below 880px is the larger of the two circle sizes already in use and
+   clears the 44px touch target. */
 :root { --gh-control: 2.5rem; --gh-control-icon: 1.125rem; }
 @media (max-width: 880px) { :root { --gh-control: 2.75rem; } }
+
+/* The pills: same height as the circles, their own width. */
+.gh-actions .g-btn { min-height: var(--gh-control); }
 
 /* ---- The logo is never the thing that gives way -------------------------
    The header row is logo + nav + actions, and the logo was the only flex
