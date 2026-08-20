@@ -48,7 +48,7 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     </g>
   </g>
 </svg></a>
-    <nav class="g-nav" aria-label="Primary"><a class="g-nav__link" href="topics.html">Topics</a><a class="g-nav__link" href="magazine.html">Magazine</a><a class="g-nav__link" href="lab.html">Lab</a><a class="g-nav__link" href="learn.html">Learn</a><a class="g-nav__link" href="community.html">Community</a></nav>
+    <nav class="g-nav" aria-label="Primary"><a class="g-nav__link" href="topics.html">Topics</a><a class="g-nav__link" href="magazine.html">Magazine</a><a class="g-nav__link" href="lab.html">Lab</a><a class="g-nav__link" href="learn.html">Learn</a><a class="g-nav__link" href="community.html">Community</a><span class="g-nav__sep" aria-hidden="true"></span><a class="g-nav__link gh-nav-signin" href="account.html#in">Sign in</a><a class="g-btn g-btn--primary g-btn--sm gh-nav-join" href="community.html#join">Join Us</a></nav>
     <div class="gh-actions">
       <a class="g-btn g-btn--ghost g-btn--sm gh-signin" href="account.html#in">Sign in</a>
       <!-- The header CTA is the site's single loudest control, and it used to
@@ -435,7 +435,7 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
       <tbody>
         <tr><td>Gravitas+</td><td>Gravitas Plus, Gravitas, G+</td><td>The plus is part of the name. In running text it is set as the logotype only in the header and footer, as plain text elsewhere.</td></tr>
         <tr><td>Topic</td><td>Dossier, episode, series</td><td>The Topic is the unit of content: one question with seven layers.</td></tr>
-        <tr><td>Film</td><td>Video, episode</td><td>Layer 01 of a Topic. A film opens a Topic, it is not a destination of its own.</td></tr>
+        <tr><td>Video</td><td>Film, episode</td><td>Layer 01 of a Topic. A video opens a Topic, it is not a destination of its own.</td></tr>
         <tr><td>Interactive Lab, Lab</td><td>Playground, sandbox</td><td></td></tr>
         <tr><td>Magazine</td><td>Blog</td><td>Writing that stands on its own.</td></tr>
         <tr><td>Learning Paths</td><td>Courses, curriculum</td><td>The archive, put in order.</td></tr>
@@ -519,7 +519,7 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
   <h3>The Logotype</h3>
   <p>The faceted G as the initial, then "ravitas" in a custom lowercase drawn to harmonise with it,
     closed by a superscript plus. Use it wherever the brand needs to be named: site header and
-    footer, channel art, film intros, partnerships. It is not DM Sans and must never be rebuilt in
+    footer, channel art, video intros, partnerships. It is not DM Sans and must never be rebuilt in
     a font.</p>
 
   <div class="bk-marks">
@@ -601,6 +601,17 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
       watermark and assistant mark 1.5rem.</li>
   </ul>
 
+  <h3>The Mark Never Gives Way</h3>
+  <p>In any row where space runs out, the logo is the last thing that may change and the first
+    thing that is protected. It is never compressed, never scaled below its minimum, and never
+    allowed to shrink so that something beside it can stay. The row sheds its own contents
+    instead, in a stated order.</p>
+  <p>In the site header that order is: below 880px the navigation collapses into the menu and
+    <b>Sign in</b> goes with it; below 400px <b>Join Us</b> follows, leaving the mark, the theme
+    control and the menu. Both keep working from inside the menu, so nothing is merely hidden.
+    The 880 figure is measured rather than chosen: logotype 149px, navigation 351px, actions
+    248px, two gaps and the gutters need 864px, so the full row is only offered where it fits.</p>
+
   <h3>Placing the Mark on Imagery</h3>
   <p>Space photography is busy. Prefer the white variant over a darker region, or add a radial
     darken (Royal Black at 30 to 50%) behind the mark, or reserve a calmer part of the composition.
@@ -622,6 +633,8 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
         Glow behind a focal subject is fine. Effects on the mark are not.</p>
       <p>Recolour outside the palette, reduce the opacity of a header or hero logo, or place the
         white mark on light imagery with no darkening.</p>
+      <p>Let a crowded row squeeze the mark. A logo that shrinks to make room for a button is a
+        layout that has chosen the wrong thing to sacrifice.</p>
     </div>
   </div>
 </section>
@@ -1099,6 +1112,25 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     <span class="g-badge g-badge--caution">Provisional</span>
     <span class="g-badge g-badge--critical">Corrected</span>
   </div>
+  <p>All of them are set in DM Mono, uppercase, at .6 to .62rem. Three rules keep them
+    consistent:</p>
+  <ul>
+    <li><b>The line box is the type size.</b> Inherit the body's 1.65 and the pill is drawn around
+      the font's full ascent and descent, which an uppercase label uses neither end of: the caps
+      ride high and the descender space shows underneath. Set <code>line-height: 1</code> and let
+      the padding do the centring, where it can be reasoned about. The pills carry .5em above and
+      .48em below; the .02em is the caps' overshoot above the baseline.</li>
+    <li><b>Never a stretched flex item.</b> A pill in a meta row inherits the row's height and
+      lays its text out at the top. <code>align-self: center</code>, always.</li>
+    <li><b>Tracking is not centred by the box.</b> Letter-spacing leaves a space after the last
+      letter that the box counts and the eye does not, so the label reads left of centre. Half of
+      it back with <code>text-indent</code>.</li>
+  </ul>
+  <p>A status chip on a card is positioned rather than flowed, which brings two more: it is
+    <b>centred on a real line of text</b>, the eyebrow on an entry or the meta line at the foot of
+    a game or path card, never floating in a corner against nothing, and the line it shares
+    <b>keeps a gutter the width of the chip</b>. An absolutely positioned chip takes no space, so
+    without the gutter the text simply runs underneath it at the first narrow width.</p>
 
   <h3>Cards</h3>
   <div class="bk-demo">
@@ -1161,7 +1193,7 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
     <table class="g-table g-table--numeric">
       <thead><tr><th>Layer</th><th>Reading time</th></tr></thead>
       <tbody>
-        <tr><td>Film</td><td>28:41</td></tr>
+        <tr><td>Video</td><td>28:41</td></tr>
         <tr><td>Essay, in depth</td><td>18 min</td></tr>
         <tr><td>Essay, overview</td><td>4 min</td></tr>
       </tbody>
@@ -1283,7 +1315,7 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
 
   <h4>Rules for Using It</h4>
   <ul>
-    <li>Use the full sequence where 7 seconds is affordable and the brand is the subject: a film
+    <li>Use the full sequence where 7 seconds is affordable and the brand is the subject: a video
       intro, a conference open, a channel trailer. It is an overture, not a preloader.</li>
     <li>For anything shorter, cut from <b>Resolve</b>, not from the middle. The construction reads
       as one gesture and half a construction reads as a glitch.</li>
@@ -1361,6 +1393,10 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
   <h3>Layout and Behaviour</h3>
   <ul>
     <li>No horizontal overflow at 360, 390, 768, 1024, 1440 and 1920px.</li>
+    <li>The logotype is at its full width at every one of them. If it is not, the header is
+      carrying a control it should have handed to the menu.</li>
+    <li>Every control in the header actions row is the same size as its neighbours.</li>
+    <li>No chip, badge or pill overprints text at any width.</li>
     <li>The mobile menu opens, closes on selection, and navigates, on every page.</li>
     <li>No console errors, no broken internal links, and no clickable dead links.</li>
     <li>Nothing renders as an orphan row in a grid.</li>
@@ -1545,6 +1581,12 @@ document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark');
   <p class="g-lead">This document changes when the product does. Corrections are logged, not
     quietly applied.</p>
   <div class="bk-log">
+    <div class="bk-log__row">
+      <div class="bk-log__when">2.2 &middot; Aug 2026</div>
+      <div class="bk-log__what">Layer 01 of a Topic is a Video, not a Film, across the interface,
+        the copy and this document. Adds the rule that the mark never gives way, with the header's
+        shedding order, and the geometry rules for tags, badges and card chips.</div>
+    </div>
     <div class="bk-log__row">
       <div class="bk-log__when">2.1 &middot; Aug 2026</div>
       <div class="bk-log__what">Adds the Aaker dimensions beside the archetypes, the logo motion

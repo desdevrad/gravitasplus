@@ -33,7 +33,7 @@ one question with every layer wrapped around it:
 
 | Layer | What it does |
 |---|---|
-| 01 Film | the way in |
+| 01 Video | the way in |
 | 02 Essay | the argument, at two depths |
 | 03 Sources | three levels — start here / go further / primary |
 | 04 Timeline | how the question developed |
@@ -287,7 +287,7 @@ what the project is actually about: how science works, how it changes the world,
 and what AI/ML does to research and education. The two calls to action are
 **Explore Topics** and **Try Lab** — the first now goes to the index rather than
 straight into one topic, because sending a first-time reader into a single
-28-minute film was a narrower door than the site deserves. Its icon changed from
+28-minute video was a narrower door than the site deserves. Its icon changed from
 a play triangle to an arrow to match.
 
 **The hero no longer fights the reader's finger.** Two things were wrong on touch.
@@ -406,7 +406,7 @@ a pair of `theme-color` metas so the browser chrome follows the theme.
 
 **Reading time, back on the home page.** The parts strip replaced a `<dl>` that
 said what six nouns say — but the thing a reader actually wants before opening a
-28-minute film and an 18-minute essay is the number, and the six nouns were not
+28-minute video and an 18-minute essay is the number, and the six nouns were not
 it. The `<dl>` is back, restyled: a mono label above the value so the commitment
 can be found without reading for it.
 
@@ -705,7 +705,7 @@ set is now 0.12 device pixels, against 1.49 for the moon before.
 
 **The poster frames were empty gradients, and the fix had to survive the
 folder and the code drifting apart.** The obvious version — a path written
-into each card, or a manifest listing every film — fails the same way: two
+into each card, or a manifest listing every video — fails the same way: two
 places now hold the same fact, and the day one is edited and the other is not,
 a card points at a file that is not there. A browser cannot read a directory
 listing, so "read the folder" has to be built out of something it can do.
@@ -750,3 +750,66 @@ it only stops a pale thumbnail from swallowing the border.
 
 Verified at 400, 480, 560, 760 and 1440px in both themes, on a page with
 artwork and a page without.
+
+## Seventeenth pass — the header row, and the tags
+
+Three changes, all of them the same shape: something had been sized or placed
+by itself, next to things that had also been sized by themselves.
+
+**The word.** Layer 01 of a topic is a Video. Film is gone from the interface,
+the copy, the class-adjacent strings and the brand book, whose lexicon row now
+reads Use *Video*, never *Film* or *episode*. Anchors moved with it, so a link
+to `#film` on a topic page is now `#video`.
+
+**The header.** The three circular controls had drifted: the CTA and the
+hamburger at 2.75rem, the theme toggle at 2.5rem, with icons at 16.8, 18 and
+20px. They now come from one token pair, `--gh-control` and
+`--gh-control-icon`, so the row cannot fall out of step again.
+
+The reason the row was crowded at all is worth stating. The logotype was the
+only flex item permitted to shrink, so whenever the header ran out of space it
+was the mark that gave way: 149px down to 15px at 721px wide, and to 14px on a
+360px phone. The rule now is that the logo never gives way. It is `flex: none`,
+and the row sheds its own contents instead:
+
+    under 880px   the nav collapses into the menu, and Sign in goes with it
+    under 400px   Join Us follows; the header keeps logo, theme, menu
+
+Both live in the menu as real links on all fifteen pages, not hidden copies,
+with a hairline separating account actions from navigation. The 880 is
+measured, not chosen: logotype 149 + nav 351 + actions 248 + two 24px gaps +
+gutters needs 864px, so the full row is only offered where it fits. The old
+breakpoint was 720, which is why the mark was being crushed on every tablet.
+Below 880 the header gap drops to 1rem so the logotype still clears at 320px.
+
+**The tags.** PLANNED, TECHNICAL and the source levels are one object, so one
+rule owns their geometry now and each component sets only colour and size.
+They had been centred by luck: the text sat in a 1.65 line box inherited from
+the body, so the pill was drawn around the font's full ascent and descent while
+the label is uppercase and uses neither, leaving the caps riding high with the
+descender space showing under them. `line-height: 1` and the padding does the
+centring, .5em over .48em, the .02em being the caps' overshoot. TECHNICAL was
+worse because its flex row was also stretching it; `align-self: center`. Since
+letter-spacing leaves a space after the last letter that the box counts and the
+eye does not, `text-indent` gives half of it back.
+
+The chip on a card is positioned rather than flowed, which caused the other
+two faults. It was pinned .7rem from the corner, inside the card's own padding
+and level with nothing, and taking no space it printed straight over whatever
+shared its line. Each chip is now centred on a real line, the eyebrow on an
+entry and the meta line at the foot of a game or path card, and that line
+carries a gutter the width of the chip.
+
+Two bugs surfaced underneath that one. `.entry__meta span + span::before` was
+unscoped, so the separator dot was drawn *inside* the reading-level pill rather
+than between the spans. And `.game-card__meta` asked for `margin-top: auto`
+while `.game-card p` set the margin shorthand; a class loses to a class plus a
+type, so the meta never reached the foot of the card and rendered at the wrong
+size besides. That is where the dead band at the bottom of every game card came
+from, and it is where the chip had been parked.
+
+Verified by measurement rather than by eye: chip and pill ink centred to within
+0.1px, every chip-to-line alignment inside 0.6px, and a sweep for
+chip-over-text collisions across all fifteen pages at 320, 340, 375, 420, 500,
+620, 720, 860, 900, 1100 and 1440px, in both themes. The logotype is at its
+full 149px at every one of them, with no horizontal overflow.

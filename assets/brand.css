@@ -24,6 +24,11 @@
 /* ---- layout: contents rail + body --------------------------------------- */
 .bk-layout { display: grid; gap: var(--g-space-xl); grid-template-columns: 15rem minmax(0, 1fr); align-items: start; }
 @media (max-width: 1000px) { .bk-layout { grid-template-columns: minmax(0, 1fr); } }
+/* Same trap as the essay column: the body holds <pre> samples, one of them a
+   140-character font link, and a grid item will not shrink below its own
+   min-content unless told to. Without this the brand book pushed sideways at
+   every width, not just on a phone. The code boxes scroll themselves. */
+.bk-layout > * { min-width: 0; }
 
 .bk-toc {
   position: sticky; top: 6rem; align-self: start;

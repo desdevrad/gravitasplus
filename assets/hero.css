@@ -52,7 +52,7 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
    looking like a list of words. The vw clamp stays as the fallback, tuned down
    so browsers without container queries land in the same neighbourhood. */
 .lp-hero__grid {
-  display: grid; grid-template-columns: 1.15fr 0.85fr;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: clamp(1.5rem, 4vw, 4rem); align-items: center; width: 100%;
 }
 .lp-hero__col { min-width: 0; }
@@ -84,6 +84,15 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
 /* ---- Three-body orbit canvas (replaces the hero portrait) ---- */
 .lp-orbit {
   width: min(115%, 38rem); margin-inline: auto; margin-right: -4%; position: relative;
+}
+/* The 115% width plus the negative right margin let the orbit spill about 86px
+   past its column - deliberate on a wide screen, where the page has 120px+ of
+   margin either side to spill into. Between the tablet breakpoint and ~1300px
+   there is no such margin: the container is already at its 1200px maximum, so
+   the spill lands outside the viewport and the page scrolls sideways. Keep the
+   bleed only where there is room for it. */
+@media (min-width: 861px) and (max-width: 1360px) {
+  .lp-orbit { width: min(100%, 38rem); margin-right: auto; }
 }
 /* The hero field is Cosmos Blue, which pulls every trail cool, a warm Sisal
    body composited over it reads blue. A soft Royal-Black well behind the
@@ -153,7 +162,7 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
 .lp-orbit__cap span { color: var(--g-text-muted); transition: color var(--g-dur) var(--g-ease-orbit); }
 .lp-orbit__cap #lp-orbit-name { font-weight: var(--g-w-medium); }
 @media (max-width: 860px) {
-  .lp-hero__grid { grid-template-columns: 1fr; text-align: center; }
+  .lp-hero__grid { grid-template-columns: minmax(0, 1fr); text-align: center; }
   .lp-hero { min-height: 0; padding-block: var(--g-space-3xl); }
   .lp-hero__inner .g-cluster { justify-content: center; }
   /* The orbit used to be pulled above the copy on a phone (order: -1), where a
@@ -224,7 +233,7 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
 }
 .lp-featured:hover .lp-play span { transform: scale(1.08); background: rgb(0 48 73 / 0.6); }
 .lp-play svg { width: 1.4rem; height: 1.4rem; margin-left: 3px; }
-@media (max-width: 760px) { .lp-featured { grid-template-columns: 1fr; } .lp-featured__media { aspect-ratio: 16/9; min-height: 0; } }
+@media (max-width: 760px) { .lp-featured { grid-template-columns: minmax(0, 1fr); } .lp-featured__media { aspect-ratio: 16/9; min-height: 0; } }
 
 /* thumbnail specimen (built from tokens, house style) */
 .lp-thumb { position: absolute; inset: 0; display: flex; align-items: center; padding: 7%; overflow: hidden; }
@@ -264,7 +273,7 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
   filter: drop-shadow(0 0 48px rgba(241, 239, 236, 0.14))
           drop-shadow(0 20px 44px rgba(3, 3, 3, 0.5));
 }
-@media (max-width: 780px) { .lp-about { grid-template-columns: 1fr; } .lp-about__portrait { width: min(76%, 22rem); margin-inline: auto; } }
+@media (max-width: 780px) { .lp-about { grid-template-columns: minmax(0, 1fr); } .lp-about__portrait { width: min(76%, 22rem); margin-inline: auto; } }
 
 /* ---- Newsletter band ---- */
 .lp-cta-band { position: relative; overflow: hidden; background: var(--g-grad-deep-space); border-radius: var(--g-radius-lg); padding: clamp(2.5rem, 5vw, 4.5rem); text-align: center; isolation: isolate; }

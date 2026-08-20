@@ -526,7 +526,7 @@
   .g-nav__link[aria-current="page"] {
     color: var(--g-text); border-bottom-color: var(--g-accent);
   }
-  @media (max-width: 720px) { .g-nav { display: none; } }
+  @media (max-width: 880px) { .g-nav { display: none; } }
 
   /* ---- Hero -------------------------------------------------------------- */
   .g-hero {
@@ -723,7 +723,11 @@
     border: 1px solid var(--g-hairline);
     border-radius: var(--g-radius);
     padding: var(--g-space-sm) var(--g-space-md);
+    /* The box scrolls itself rather than stretching its column, and the swipe
+       stops at its own edge instead of dragging the page with it. */
+    max-width: 100%;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     font-size: var(--g-fs-small);
     line-height: 1.7;
     color: var(--g-text);
@@ -803,9 +807,9 @@
   }
   .g-footer__grid {
     display: grid; gap: var(--g-space-lg);
-    grid-template-columns: 1.5fr repeat(3, 1fr);
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
   }
-  @media (max-width: 800px) { .g-footer__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 800px) { .g-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .g-footer__heading {
     font-size: var(--g-fs-eyebrow); text-transform: uppercase;
     letter-spacing: var(--g-track-eyebrow); color: var(--g-text-muted);
