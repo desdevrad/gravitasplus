@@ -75,10 +75,26 @@ h1, h2, h3, h4 { overflow-wrap: break-word; }
   gap: .35rem .8rem;
   margin-top: var(--g-space-lg); font-size: var(--g-fs-small); color: var(--g-text-muted);
 }
-.lp-hero__credit > span { display: inline-flex; align-items: center; white-space: nowrap; }
+/* Each fact is its own inline-flex box so the separator dot below can be a
+   flex item with `flex: none`. That has a cost that is easy to miss: inside a
+   flex container a bare text node becomes an *anonymous flex item*, and the
+   collapsible whitespace at its edges is thrown away. In "312K subscribers"
+   the number is an element and the word is a text node, so the space between
+   them was being eaten and the two ran together. It is a layout rule removing
+   a space that the markup does have, which is why nothing looks wrong in the
+   HTML.
+
+   `gap` puts the word space back as a real gap, and unlike an &nbsp; in the
+   markup it fixes the whole row rather than the one place it was noticed.
+   0.25em is DM Sans's word space. The dot then has to give the same amount
+   back, or the space it was carrying would be a quarter of an em wider than
+   the one on the item before it. */
+.lp-hero__credit > span {
+  display: inline-flex; align-items: center; white-space: nowrap; gap: 0.25em;
+}
 .lp-hero__credit > span + span::before {
   content: ""; width: 3px; height: 3px; border-radius: 50%; flex: none;
-  background: var(--g-border-strong); margin-right: .8rem;
+  background: var(--g-border-strong); margin-right: calc(.8rem - 0.25em);
 }
 .lp-hero__credit svg { height: 1.5rem; width: auto; opacity: 0.9; }
 /* ---- Three-body orbit canvas (replaces the hero portrait) ---- */

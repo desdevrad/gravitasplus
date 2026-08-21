@@ -329,6 +329,12 @@ button.bk-tok:hover { border-color: var(--g-border-strong); }
 }
 .bk-icon__btn svg { width: 1.25rem; height: 1.25rem; }
 .bk-icon span { font-family: var(--g-font-mono); font-size: var(--g-fs-caption); color: var(--g-text-subtle); }
+/* The section set is shown on its plate, at the size it is actually used, so
+   the row is a specimen rather than a legend. The tile is wider than the
+   interface one because these labels are words rather than platform names,
+   and "Learning Paths" broke over three lines in a 5rem column. */
+.bk-icon--wide { width: 7.5rem; }
+.bk-icon--wide span { text-align: center; }
 
 /* ---- texture demo -------------------------------------------------------- */
 .bk-wells { display: grid; gap: var(--g-space-sm); grid-template-columns: repeat(3, minmax(0, 1fr)); }

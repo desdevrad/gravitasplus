@@ -667,6 +667,46 @@
   .g-badge--caution  { color: var(--g-signal-caution); }
   .g-badge--critical { color: var(--g-signal-critical); }
 
+  /* ---- Icons ----------------------------------------------------------------
+     Every mark in the set is drawn to the geometry in the brand book, section
+     11: a 24-unit box, an effective stroke of 1.7, and the ink centroid solved
+     onto (12, 12). This component does not draw anything. It sizes the marks,
+     and it keeps those sizes on whole pixels, because a 24-unit grid rendered
+     into a fractional box is exactly how one 1.7 stroke ends up looking like
+     two different weights in the same row.
+
+       --sm   1rem      inline with body text, footer lists, breadcrumbs
+              1.25rem   default: menu rows, buttons, list rows
+       --lg   1.5rem    inside a plate, on cards and page heads
+
+     Icons never carry a colour of their own. They inherit currentColor, so the
+     thing around them decides once and both themes follow. */
+  .g-ic     { width: 1.25rem; height: 1.25rem; flex: none; }
+  .g-ic--sm { width: 1rem;    height: 1rem; }
+  .g-ic--lg { width: 1.5rem;  height: 1.5rem; }
+
+  /* The plate is the icon's card-level presentation: a section's mark, sized
+     to sit beside a heading rather than inside a line of text. 3rem around a
+     1.5rem icon leaves 12px a side, whole pixels at 100%, and matches the
+     header controls' 2.5rem family closely enough to read as one system
+     without competing with them.
+
+     It is deliberately quiet by default and warms on hover, so a grid of six
+     reads as six labels rather than six buttons. */
+  .g-ic-plate {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 3rem; height: 3rem; flex: none;
+    border: 1px solid var(--g-hairline);
+    border-radius: var(--g-radius);
+    background: rgb(var(--g-tint) / 0.05);
+    color: var(--g-accent);
+    transition: border-color var(--g-dur) var(--g-ease-orbit),
+                background-color var(--g-dur) var(--g-ease-orbit),
+                color var(--g-dur) var(--g-ease-orbit);
+  }
+  .g-ic-plate--sm { width: 2.25rem; height: 2.25rem; border-radius: var(--g-radius-sm); }
+  .g-ic-plate--sm .g-ic { width: 1.25rem; height: 1.25rem; }
+
   /* ---- Forms ---------------------------------------------------------------- */
   .g-field { display: flex; flex-direction: column; gap: var(--g-space-3xs); }
   .g-label {
@@ -817,6 +857,16 @@
   }
   .g-footer a { color: var(--g-text-muted); text-decoration: none; }
   .g-footer a:hover { color: var(--g-text); }
+  /* Read and Do are the six sections, so they carry the six marks. The icon is
+     dimmer than its label at rest: in a column of three, six full-strength
+     glyphs would out-shout the words they belong to. */
+  /* flex-start on the column, so each row is only as wide as its own label:
+     a flex item is blockified, and stretched rows put the hover target several
+     centimetres to the right of the last word. */
+  .g-stack--ic { align-items: flex-start; }
+  .g-stack--ic a { display: flex; align-items: center; gap: var(--g-space-2xs); }
+  .g-stack--ic .g-ic { color: var(--g-text-subtle); transition: color var(--g-dur) var(--g-ease-orbit); }
+  .g-stack--ic a:hover .g-ic { color: var(--g-accent); }
   .g-footer__legal {
     margin-top: var(--g-space-xl); padding-top: var(--g-space-sm);
     border-top: 1px solid var(--g-hairline);

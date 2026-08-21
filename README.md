@@ -821,3 +821,90 @@ Verified by measurement rather than by eye: chip and pill ink centred to within
 chip-over-text collisions across all fifteen pages at 320, 340, 375, 420, 500,
 620, 720, 860, 900, 1100 and 1440px, in both themes. The logotype is at its
 full 149px at every one of them, with no horizontal overflow.
+
+## Eighteenth pass — the product marks
+
+Seven drawn icons arrived — Topics, Community, Lab, Magazine, Learning Paths,
+Newsletter, and Join Us — and the job was to fit them to the set the site already has rather
+than drop them in beside it.
+
+**The geometry was already written down.** Brand book section 11 fixes it: a
+24-unit box, ink centroid solved onto (12, 12), scaled to an optical cap of
+19.6 units for an outline mark, and a counter-scaled `stroke-width` on the
+group so every icon still draws at 1.7 whatever its transform. The six came in
+at stroke 1.5 on six different viewBoxes, each one a tight ink bound.
+
+That last rule turns out to make the cap solve in closed form, which the book
+now records. Ink extent is `s × (G + 1.7/s)` where `G` is the longest side less
+the 0.75 stroke halo the artwork was drawn with; the `s` cancels against the
+counter-scale and `s = 17.9 / G`. Only the centroid needs rasterising, and
+since a translation moves the centroid rigidly, one render per icon is enough.
+Scales came out 0.962 to 1.178, stroke attributes 1.444 to 1.766, and no two
+match — which is the point.
+
+**One change to the artwork.** Each mark carries a solid element inside an open
+outline, and that is the set's shared motif. At the radii they were drawn with,
+the accent dots landed between 2.5 and 4.0 units across once each icon had been
+scaled to the cap — six different dots, not one motif. They are re-cut to 3.1
+units in all five that have one. The filled head in the Join Us mark is not an
+accent dot but part of the figure, so it keeps its drawn size. Everything else
+is transform only.
+
+The Join Us mark also needed a note the others did not. Its bounding box is not
+a uniform stroke halo — the top edge comes from the unstroked head — so the
+geometry box had to be measured per edge rather than by subtracting 1.5 all
+round. The width still dominates and is fully stroked, so `s = 17.9 / G` held;
+it just could not be assumed.
+
+Sources of truth are `assets/icons/*.svg`. The pages inline them, as they do
+the logotype: an external `<use>` sprite does not resolve from `file://`, and
+these pages are meant to open by double-click.
+
+**Where they go**, and the reasoning, since a mark used at four sizes needs a
+rule for each:
+
+    plate, 3rem     home card, and the top of that section's own page
+    1.25rem bare    rows in the mobile menu — not the desktop nav
+    1rem bare       footer Read/Do columns, dimmed to --g-text-subtle
+    0.875rem inline the crumb on a page inside a section
+    1rem in button  Join Us, in the header and in the dropdown — nowhere else
+
+The desktop nav is deliberately excluded. Five words in a line with a mark in
+front of each is a toolbar; this is a sentence of links. Same markup on all
+fifteen pages, one display switch inside the dropdown's existing media query.
+Sign in has no mark, so it is indented to the same text column as the five that
+do, or it reads as a mis-set row rather than a different kind of item.
+
+On a section page the plate sits above the crumb, not beside the heading:
+next to an `h1` that runs to 3.4rem a 3rem plate either grows into a badge or
+looks undersized, and both fight the headline. Detail pages get the same mark
+at 0.875rem in the crumb instead — it says which section you are in without
+repeating that section's opening gesture. The crumb sets 0.8125rem, so the mark
+is sized against that and shifted to centre on the x-height, which the centroid
+rule makes a single number rather than a fiddle.
+
+**The six cards were rebuilt.** "Six Ways In" was a 6-column grid with the
+first two spanning half a row and four narrow ones beneath: a section named for
+six ways showing two ways and four afterthoughts. It took four media queries
+and two `!important`s to hold that shape, and two of those queries were already
+dead — beaten by the `!important` in the one above them. Now that each card
+carries its own mark the set reads as six of one kind, so it is three columns
+that halve twice, no spans and no overrides. The number moves to the right of
+the mark and drops to `--g-text-subtle`; the icon carries the accent now, so
+the number no longer needs to. `.space--wide` is gone rather than left unused.
+
+The header CTA's mark is sized in rem rather than the button's em. `.g-btn__icon`
+is `1em`, and at `--sm` that is 13px: a 24-unit grid in a 13px box puts the 1.7
+stroke on a fraction of a pixel, which would have made the one icon in the
+header row that renders at a different weight from every other. It is 1rem in a
+2.5rem pill, and `--_shift`, the optical correction for a leading icon, is
+recomputed from that width instead of from 1em.
+
+New in the design system: `.g-ic` at three sizes and `.g-ic-plate`, sized so
+the leftover space divides to whole pixels at 100% — 3rem around a 1.5rem icon
+leaves 12px a side. Icons never carry a colour; they inherit `currentColor` so
+the plate or the row decides once and both themes follow.
+
+Brand book section 11 is rewritten as two sets, fifteen marks, with a table of
+what each drawing is doing, the placement rules above, the closed-form cap and
+the dot rule. The pack is downloadable from Assets. Version log 2.3.
