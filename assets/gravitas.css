@@ -50,6 +50,21 @@
     --g-text:              var(--g-white-tint);
     --g-text-muted:        var(--g-sisal);
     --g-text-subtle:       rgb(var(--g-tint) / 0.62);
+
+    /* A dimmed *icon* cannot use the token above. --g-text-subtle carries its
+       lightness in an alpha channel, which is fine for a glyph rendered once
+       but wrong for a drawing made of several stroked paths: each path is
+       composited separately, so wherever two strokes cross, the alpha applies
+       twice and the join comes out visibly brighter than the lines feeding it.
+       On the flask that put a bright pip at the neck and another at the rim.
+
+       So a dimmed icon takes an opaque colour and puts the alpha on the
+       element instead. Element opacity flattens the whole drawing first and
+       dims the result once, so a crossing is exactly as light as a line. The
+       rendered colour is identical to --g-text-subtle; only the compositing
+       order changes. */
+    --g-ic-dim:            rgb(var(--g-tint));
+    --g-ic-dim-a:          0.62;
     --g-text-inverse:      var(--g-cosmos-600);
 
     --g-hairline:          rgb(var(--g-tint) / 0.16);
@@ -202,6 +217,9 @@
     --g-text:              #002236;
     --g-text-muted:        #3c5464;
     --g-text-subtle:       #5d7280;
+    /* Opaque already, so nothing to flatten: the icon takes it at full alpha. */
+    --g-ic-dim:            #5d7280;
+    --g-ic-dim-a:          1;
     --g-text-inverse:      var(--g-white-tint);
 
     --g-tint:              0 48 73;
@@ -270,6 +288,8 @@
     --g-text: var(--g-cosmos-600);
     --g-text-muted: #4a5c68;
     --g-text-subtle: #6b7a84;
+    --g-ic-dim: #6b7a84;
+    --g-ic-dim-a: 1;
     --g-text-inverse: var(--g-white-tint);
     --g-hairline: rgb(0 48 73 / 0.14);
     --g-border: rgb(0 48 73 / 0.24);
@@ -865,8 +885,12 @@
      centimetres to the right of the last word. */
   .g-stack--ic { align-items: flex-start; }
   .g-stack--ic a { display: flex; align-items: center; gap: var(--g-space-2xs); }
-  .g-stack--ic .g-ic { color: var(--g-text-subtle); transition: color var(--g-dur) var(--g-ease-orbit); }
-  .g-stack--ic a:hover .g-ic { color: var(--g-accent); }
+  .g-stack--ic .g-ic {
+    color: var(--g-ic-dim); opacity: var(--g-ic-dim-a);
+    transition: color var(--g-dur) var(--g-ease-orbit),
+                opacity var(--g-dur) var(--g-ease-orbit);
+  }
+  .g-stack--ic a:hover .g-ic { color: var(--g-accent); opacity: 1; }
   .g-footer__legal {
     margin-top: var(--g-space-xl); padding-top: var(--g-space-sm);
     border-top: 1px solid var(--g-hairline);

@@ -133,7 +133,9 @@
      the nav is five words in a line, where an icon in front of each one turns
      navigation into a toolbar; in a vertical panel the same marks are what
      make the rows scannable at arm's length. Same markup, one display switch. */
-  .g-nav .g-nav__ic { display: block; color: var(--g-text-subtle); }
+  /* Dimmed via --g-ic-dim, not --g-text-subtle: see that token's note. An icon
+     is several stroked paths, and a per-path alpha lights up every crossing. */
+  .g-nav .g-nav__ic { display: block; color: var(--g-ic-dim); opacity: var(--g-ic-dim-a); }
   /* Sign in is the one mark whose drawing is not symmetric about the box: a
      solid dot on one side, an open bracket on the other, so the centroid rule
      that positions every mark leaves its *bounding box* 2.4 units left of
@@ -147,7 +149,7 @@
      plate the mark keeps its centroid position. */
   .g-nav .g-ic--signin { margin-left: 2px; }
   .g-nav .g-nav__link:hover .g-nav__ic,
-  .g-nav .g-nav__link[aria-current="page"] .g-nav__ic { color: var(--g-accent); }
+  .g-nav .g-nav__link[aria-current="page"] .g-nav__ic { color: var(--g-accent); opacity: 1; }
   /* Sign in used to be indented by hand to reach the text column the five
      marked rows share. It has its own mark now, so the indent is gone and the
      alignment comes from the same box the others use. */

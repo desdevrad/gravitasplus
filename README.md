@@ -944,6 +944,27 @@ indented by hand — `padding-left: calc(space-sm + 1.25rem + space-2xs)` — to
 reach the text column the five marked rows share. It has a mark now, so the
 indent is gone and the alignment comes from the same box as everything else.
 
+**A dimmed icon cannot use `--g-text-subtle`.** In dark mode that token carries
+its lightness in an alpha channel — `rgb(var(--g-tint) / 0.62)` — which is fine
+for a glyph rendered once and wrong for a drawing made of several stroked
+paths. Each path composites separately, so wherever two strokes cross the alpha
+applies twice: on the flask, a bright pip at the neck and another at the rim,
+and the same at every junction in the menu and footer columns. Measured on the
+flask against the panel: the intended ink is rgb(131 143 146), and the
+crossings were coming out at rgb(181 179 174), with sixteen distinct tones in
+one drawing.
+
+The fix is `--g-ic-dim` / `--g-ic-dim-a`: an opaque colour, with the alpha moved
+onto the element. Element opacity forces the drawing to be composited as a
+group — flattened first, dimmed once — so a crossing is exactly as light as a
+line, and the rendered colour is identical to what was intended. One tone now,
+not sixteen. Light themes set the alpha to 1, since their subtle ink is already
+opaque and never had the bug.
+
+Audited the rest: the only other subtle-coloured SVG is the placeholder avatar's
+plus, and that is a single `<path>` with two subpaths, which strokes as one
+paint operation and does not accumulate.
+
 New in the design system: `.g-ic` at three sizes and `.g-ic-plate`, sized so
 the leftover space divides to whole pixels at 100% — 3rem around a 1.5rem icon
 leaves 12px a side. Icons never carry a colour; they inherit `currentColor` so
