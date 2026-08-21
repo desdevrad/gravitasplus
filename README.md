@@ -908,6 +908,37 @@ header row that renders at a different weight from every other. It is 1rem in a
 recomputed from that width instead of from 1em. Sign in takes the same
 treatment, so all three marks in the header row draw at one weight.
 
+**The menu column was then measured rather than guessed.** Row whitespace was
+being set box-to-box, but a mark's box is 20px and its drawing stops about
+1.8px short each side, so a 1rem inset and a 0.5rem gap read as 17.8px of air
+on the left against 9.8px between the mark and its label — each mark nearly
+twice as far from the panel edge as from the word it belonged to, which is what
+made them look glued to the text. Both are 0.75rem now: 13.8px of ink-to-ink
+air on each side. The label stays at 44px, so nothing else in the panel moves.
+
+Sign in needed one more thing. It is the only mark whose drawing is not
+symmetric about its box — a solid dot one side, an open bracket the other — so
+the centroid rule that positions every mark leaves its *bounding box* 2.4 units
+left of centre. On a plate that is correct and invisible; in a fixed-width
+column it is neither, because the eye aligns drawings and not boxes, and it sat
+2px left of the other five and 2px further from its own label. In a row it is
+centred on its box instead, by a whole-pixel nudge — a fractional margin would
+put a 1.7 stroke on a half-pixel grid and soften the one mark being fixed. The
+column now measures 13.8px each side for every mark, except the two portrait
+drawings, Lab and Sign in, which sit at 15.8px each side: symmetric, which is
+the part that matters.
+
+The menu's own Join Us row needed the opposite treatment. Below 400px the CTA
+leaves the header and becomes the last row of the panel as a full-width pill —
+and a full-width button centres its contents, so once it had a mark, that mark
+floated in the middle of the panel while the six above it sat in a column at
+the left edge. One icon out of seven out of line is the first thing the eye
+finds. It is now set to the menu's column instead of its own centre, which
+takes `justify-content: flex-start`, the icon at the column's 1.25rem rather
+than the header's 1rem, and its padding and gap restated as the rows' 0.75rem —
+which also retires the optical lead-shift, since that correction balances a
+*centred* label and is wrong for a flush one.
+
 That also retires a hack. Sign in had no mark, so in the dropdown it was
 indented by hand — `padding-left: calc(space-sm + 1.25rem + space-2xs)` — to
 reach the text column the five marked rows share. It has a mark now, so the

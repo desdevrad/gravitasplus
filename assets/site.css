@@ -62,13 +62,12 @@
    is recomputed from that width instead of from 1em. */
 .lp-header__cta .g-btn__icon { width: 1rem; height: 1rem; }
 .lp-header__cta.g-btn--lead { --_shift: calc((1rem + 0.5rem) / 4); }
-/* Same for Sign in beside it, and for the dropdown's Join Us, which is the same
-   button at the same size. All three marks in the header row now render at one
-   weight, which was the point. */
-.gh-signin .g-btn__icon,
-.gh-nav-join .g-btn__icon { width: 1rem; height: 1rem; }
-.gh-signin.g-btn--lead,
-.gh-nav-join.g-btn--lead { --_shift: calc((1rem + 0.5rem) / 4); }
+/* Same for Sign in beside it, so both marks in the header row render at one
+   weight, which was the point. The dropdown's Join Us is deliberately not in
+   this rule: it is not a header control, it is the last row of a menu, and it
+   is sized to that column instead, below. */
+.gh-signin .g-btn__icon { width: 1rem; height: 1rem; }
+.gh-signin.g-btn--lead { --_shift: calc((1rem + 0.5rem) / 4); }
 .lp-menu-btn { display: none; }
 .g-header__inner { position: relative; }
 .lp-header__actions { display: flex; align-items: center; gap: var(--g-space-2xs); flex: none; flex-wrap: nowrap; }
@@ -117,16 +116,36 @@
     z-index: var(--g-z-overlay);
   }
   .g-nav.is-open { display: flex; }
+  /* Row whitespace is set from the *ink*, not from the boxes. A mark's box is
+     20px but its drawing stops about 1.8px short on each side, so a 1rem inset
+     and a 0.5rem gap measured box-to-box actually read as 17.8px of air on the
+     left and 9.8px between the mark and its label — the mark ends up nearly
+     twice as far from the panel edge as from the word it belongs to, which is
+     why it looked stuck to the text. At 0.75rem each, both whitespaces come to
+     13.8px of ink-to-ink air, and the icon column separates cleanly. The label
+     lands at 44px, unchanged, so nothing else in the panel moves. */
   .g-nav .g-nav__link {
-    padding: var(--g-space-2xs) var(--g-space-sm);
+    padding: var(--g-space-2xs) var(--g-space-xs);
     border-bottom: 0; border-radius: var(--g-radius-sm);
-    display: flex; align-items: center; gap: var(--g-space-2xs);
+    display: flex; align-items: center; gap: var(--g-space-xs);
   }
   /* The marks appear here and nowhere else in the header. On the desktop row
      the nav is five words in a line, where an icon in front of each one turns
      navigation into a toolbar; in a vertical panel the same marks are what
      make the rows scannable at arm's length. Same markup, one display switch. */
   .g-nav .g-nav__ic { display: block; color: var(--g-text-subtle); }
+  /* Sign in is the one mark whose drawing is not symmetric about the box: a
+     solid dot on one side, an open bracket on the other, so the centroid rule
+     that positions every mark leaves its *bounding box* 2.4 units left of
+     centre. On a plate that is right and invisible. In a fixed-width column it
+     is visible, because the eye aligns the drawings, not the boxes — the mark
+     sat 2px left of the other five and 2px further from its own label.
+
+     So in a row it is centred on its box instead. Whole pixels, deliberately:
+     a fractional margin puts a 1.7 stroke on a half-pixel grid and softens the
+     one mark it was meant to fix. This is a row-context correction only; on the
+     plate the mark keeps its centroid position. */
+  .g-nav .g-ic--signin { margin-left: 2px; }
   .g-nav .g-nav__link:hover .g-nav__ic,
   .g-nav .g-nav__link[aria-current="page"] .g-nav__ic { color: var(--g-accent); }
   /* Sign in used to be indented by hand to reach the text column the five
@@ -154,10 +173,26 @@
 
 @media (max-width: 400px) {
   .gh-actions .lp-header__cta { display: none; }
-  .gh-nav-join {
-    display: inline-flex; width: 100%;
-    margin-top: var(--g-space-3xs);
-  }
+  /* Join Us drops out of the header and becomes the last row of the menu. It
+     stays a filled pill, because it is still the one loud control, but it stops
+     behaving like a standalone button: a full-width button centres its
+     contents, so its mark floated in the middle of the panel while the six
+     above it sat in a column at the left edge. That is one icon out of seven
+     out of line, and it is the first thing the eye finds.
+
+     So it is set to the menu's column rather than to its own centre. The rows
+     put their label at 0.75rem of padding + a 1.25rem mark + a 0.75rem gap =
+     2.75rem from the panel's content edge, and the button reproduces that.
+
+     Its padding and gap are restated rather than inherited: at --sm the button
+     is built on 1rem and 0.5rem, and it needs the rows' 0.75rem and 0.75rem.
+     Setting padding-inline outright also retires the optical lead-shift, which
+     exists to balance a *centred* label and is simply wrong for a flush one. */
+  .gh-nav-join { display: inline-flex; width: 100%; margin-top: var(--g-space-3xs);
+                 justify-content: flex-start; }
+  .g-nav .gh-nav-join { gap: var(--g-space-xs); }
+  .g-nav .gh-nav-join.g-btn--lead { padding-inline: var(--g-space-xs); }
+  .gh-nav-join .g-btn__icon { width: 1.25rem; height: 1.25rem; }
 }
 
 /* ---- Optical centring for buttons with a leading icon --------------------
