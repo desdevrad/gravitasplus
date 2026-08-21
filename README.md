@@ -824,8 +824,8 @@ full 149px at every one of them, with no horizontal overflow.
 
 ## Eighteenth pass — the product marks
 
-Seven drawn icons arrived — Topics, Community, Lab, Magazine, Learning Paths,
-Newsletter, and Join Us — and the job was to fit them to the set the site already has rather
+Eight drawn icons arrived — Topics, Community, Lab, Magazine, Learning Paths,
+Newsletter, Join Us and Sign in — and the job was to fit them to the set the site already has rather
 than drop them in beside it.
 
 **The geometry was already written down.** Brand book section 11 fixes it: a
@@ -850,6 +850,13 @@ units in all five that have one. The filled head in the Join Us mark is not an
 accent dot but part of the figure, so it keeps its drawn size. Everything else
 is transform only.
 
+Sign in needed the rule stated more carefully. Growing its dot from 2.4 to 3.1
+units would have closed the 0.3-unit gap the drawing leaves between the dot and
+the arrow's cap, and overlapped them. So the dot moves — 0.48 units further out
+— rather than staying small: the diameter is the rule, the clearance is the
+drawing. Its bounding box has the same per-edge quirk as Join Us, the left edge
+coming from the unstroked dot, and here the height dominates instead.
+
 The Join Us mark also needed a note the others did not. Its bounding box is not
 a uniform stroke halo — the top edge comes from the unstroked head — so the
 geometry box had to be measured per edge rather than by subtracting 1.5 all
@@ -867,7 +874,7 @@ rule for each:
     1.25rem bare    rows in the mobile menu — not the desktop nav
     1rem bare       footer Read/Do columns, dimmed to --g-text-subtle
     0.875rem inline the crumb on a page inside a section
-    1rem in button  Join Us, in the header and in the dropdown — nowhere else
+    1rem in button  Join Us and Sign in, header and dropdown — nowhere else
 
 The desktop nav is deliberately excluded. Five words in a line with a mark in
 front of each is a toolbar; this is a sentence of links. Same markup on all
@@ -898,13 +905,19 @@ is `1em`, and at `--sm` that is 13px: a 24-unit grid in a 13px box puts the 1.7
 stroke on a fraction of a pixel, which would have made the one icon in the
 header row that renders at a different weight from every other. It is 1rem in a
 2.5rem pill, and `--_shift`, the optical correction for a leading icon, is
-recomputed from that width instead of from 1em.
+recomputed from that width instead of from 1em. Sign in takes the same
+treatment, so all three marks in the header row draw at one weight.
+
+That also retires a hack. Sign in had no mark, so in the dropdown it was
+indented by hand — `padding-left: calc(space-sm + 1.25rem + space-2xs)` — to
+reach the text column the five marked rows share. It has a mark now, so the
+indent is gone and the alignment comes from the same box as everything else.
 
 New in the design system: `.g-ic` at three sizes and `.g-ic-plate`, sized so
 the leftover space divides to whole pixels at 100% — 3rem around a 1.5rem icon
 leaves 12px a side. Icons never carry a colour; they inherit `currentColor` so
 the plate or the row decides once and both themes follow.
 
-Brand book section 11 is rewritten as two sets, fifteen marks, with a table of
+Brand book section 11 is rewritten as two sets, sixteen marks, with a table of
 what each drawing is doing, the placement rules above, the closed-form cap and
 the dot rule. The pack is downloadable from Assets. Version log 2.3.

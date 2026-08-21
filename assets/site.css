@@ -62,8 +62,12 @@
    is recomputed from that width instead of from 1em. */
 .lp-header__cta .g-btn__icon { width: 1rem; height: 1rem; }
 .lp-header__cta.g-btn--lead { --_shift: calc((1rem + 0.5rem) / 4); }
-/* Same for the dropdown's Join Us, which is the same button at the same size. */
+/* Same for Sign in beside it, and for the dropdown's Join Us, which is the same
+   button at the same size. All three marks in the header row now render at one
+   weight, which was the point. */
+.gh-signin .g-btn__icon,
 .gh-nav-join .g-btn__icon { width: 1rem; height: 1rem; }
+.gh-signin.g-btn--lead,
 .gh-nav-join.g-btn--lead { --_shift: calc((1rem + 0.5rem) / 4); }
 .lp-menu-btn { display: none; }
 .g-header__inner { position: relative; }
@@ -125,10 +129,9 @@
   .g-nav .g-nav__ic { display: block; color: var(--g-text-subtle); }
   .g-nav .g-nav__link:hover .g-nav__ic,
   .g-nav .g-nav__link[aria-current="page"] .g-nav__ic { color: var(--g-accent); }
-  /* Sign in has no mark of its own, so it is indented to the same text column
-     as the five that do: icon (1.25rem) + gap. Left flush it read as a
-     mis-set row rather than a different kind of item. */
-  .g-nav .gh-nav-signin { padding-left: calc(var(--g-space-sm) + 1.25rem + var(--g-space-2xs)); }
+  /* Sign in used to be indented by hand to reach the text column the five
+     marked rows share. It has its own mark now, so the indent is gone and the
+     alignment comes from the same box the others use. */
   .g-nav .g-nav__link:hover,
   .g-nav .g-nav__link[aria-current="page"] {
     background: rgb(var(--g-tint) / 0.1); color: var(--g-text);

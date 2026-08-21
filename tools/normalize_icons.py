@@ -58,6 +58,11 @@ ICONS = {
     '<path d="M1.98,2.26c2.88,5.22,5.41,7.83,7.77,7.83s4.89-2.61,7.77-7.83"/>',
     '<path d="M18.39,3.84c.47,2.28.48,4.67,0,7.03-.29,1.44-1.47,2.53-2.92,2.73-3.8.51-7.66.51-11.46,0-1.45-.19-2.62-1.27-2.91-2.7-.47-2.28-.48-4.67,0-7.03.29-1.44,1.47-2.53,2.92-2.73,3.8-.51,7.66-.51,11.46,0,1.45.19,2.62,1.27,2.91,2.7Z"/>',
   ], dot=(9.75, 7.11, 1.24)),
+  "signin": dict(w=14.95, h=20, stroke=[
+    '<path d="M6.55.75h4.75c1.6,0,2.9,1.3,2.9,2.9v12.7c0,1.6-1.3,2.9-2.9,2.9h-4.75"/>',
+    '<path d="M3.55,10h5.4"/>',
+    '<path d="M6.55,7.3l2.7,2.7-2.7,2.7"/>',
+  ], dot=(1.25, 10, 1.25), dot_dx=-0.48),
   "join": dict(w=17.5, h=14.75, stroke=[
     '<path d="M13.75,8.5h3M15.25,7v3"/>',
     '<path d="M13.75,14c-2.41-2.67-4.53-4-6.5-4s-4.09,1.33-6.5,4"/>',
@@ -75,6 +80,10 @@ def body(name, s, tx, ty):
         parts += shape.replace("/>", ' fill="currentColor" stroke="none"/>')
     if ic["dot"]:
         cx, cy, _ = ic["dot"]
+        # Where growing the dot to the set's diameter would close a gap the
+        # artwork was drawn with, the dot moves rather than shrinks: the
+        # diameter is the rule, the clearance is the drawing.
+        cx += ic.get("dot_dx", 0)
         # The accent dot is re-cut to one diameter across the set: at the native
         # radii it rendered between 2.5 and 4.0 units once each icon was scaled
         # to the cap, which read as six different dots rather than one motif.
